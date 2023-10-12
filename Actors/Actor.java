@@ -1,14 +1,17 @@
 package Actors;
 
-import java.util.Vector;
 import Items.Item; //Might cause issues when different types of items are introduced. 
+import java.util.Random;
+import java.util.Vector;
 
 /**
  *  Parent object for PC and NPCs.
  */
 public class Actor {
+    //fields used for game generation.
     int positionX;
     int positionY;
+    Random random = new Random();
 
     //in game stats
     public int healthPoints;
@@ -17,8 +20,9 @@ public class Actor {
     public int agility;
     public int coins;
 
+
     //in game inventory of items
-    public Vector<Item> inventory = new Vector<>();
+    public Vector<Item> inventory;
 
 
     //initialize a representation for the actor (such as a sprite).

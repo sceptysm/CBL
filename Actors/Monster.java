@@ -1,10 +1,9 @@
 package Actors;
 
-import java.util.Random;
-
 public class Monster extends Actor {
 
-    Random random = new Random();
+    int level;
+    int experiencePointWorth;
 
     public Monster() {
 
@@ -12,6 +11,7 @@ public class Monster extends Actor {
         positionX = 1;
         positionY = 1;
 
+        //stats initialization
         healthPoints = 5;
         strength = 1;
         defense = 1;

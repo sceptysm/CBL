@@ -1,0 +1,40 @@
+PAINTING
+---
+1:
+
+For painting and visual representation we will need to add a SCALER.
+This SCALER scales the relative sizes of every object to be painted
+by its size. This is to ease up the coding of the program's logic when
+it comes to locations on screen, but e.g. size 1 would mean that the
+object would take up 1 pixel on the screen so it needs to be scaled up.
+
+Alternative solution may be used. 
+
+2:
+
+Actors and Tiles need a visual representation. Sprite or a PNG?
+Or a Square in the meantime?
+Also, Tiles need to be bigger than the actors in them / The visuals
+have to be painted top to bottom.
+
+---
+
+INTERACT METHOD
+---
+
+Player can interact with dead actors / treasure actor. 
+This happens because the program checks for the HP of the actor
+and if HP <= 0 than the player interacts instead of attacks.  
+
+---
+
+INVENTORY
+--- 
+
+Painting Inventory may be cumbersome due to the possibility of infinite
+inventory. Implement a max inventory size / ability to scroll the inventory.
+(IDK how swing works)
+
+give() methods inside of treasure might be moved Actor class as Monsters will also 
+likely have a similar set of methods.
+

@@ -20,7 +20,7 @@ public class Combat {
     
     /**
      * General Idea of combat. 
-     * Missing evade and defense check.
+     * Missing evade and defense checks.
      * 
      */
     public void attack() {

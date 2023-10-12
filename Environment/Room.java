@@ -7,7 +7,7 @@ package Environment;
  */
 public abstract class Room {
 
-    private static final int ROOM_SIZE = 9; // The dimension size of a room.   
+    private static final int ROOM_SIZE = 8; // The dimension size of a room.   
     private static Tile[][] tileSet = new Tile[ROOM_SIZE][ROOM_SIZE];
 
     //Pointers to other rooms in the general 4 directions.

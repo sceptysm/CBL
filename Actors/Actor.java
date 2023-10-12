@@ -22,16 +22,32 @@ public class Actor {
 
     //initialize a representation for the actor.
 
-    void moveUp() {
+    public void moveUp() {
         positionY += 1;
+
+        System.out.println("this actor has Y: " + this.positionY);
+        System.out.println("this actor has X: " + this.positionX);
+
     }
-    void moveDown() {
+
+    public void moveDown() {
         positionY -= 1;
+
+        System.out.println("this actor has Y: " + this.positionY);
+        System.out.println("this actor has X: " + this.positionX);
     }
-    void moveLeft() {
+
+    public void moveLeft() {
         positionX -= 1;
+
+        System.out.println("this actor has Y: " + this.positionY);
+        System.out.println("this actor has X: " + this.positionX);
     }
-    void moveRight() {
+
+    public void moveRight() {
         positionX += 1;
+
+        System.out.println("this actor has Y: " + this.positionY);
+        System.out.println("this actor has X: " + this.positionX);
     }
 }

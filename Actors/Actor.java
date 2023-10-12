@@ -22,6 +22,29 @@ public class Actor {
 
     //initialize a representation for the actor.
 
+    // Getters for fields of Actor.
+    public int getStrength() {
+        return strength;
+    }
+    public int getAgility() {
+        return agility;
+    }
+    public int getDefense() {
+        return defense;
+    }
+    public Vector<Object> getInventory() {
+        return inventory;
+    }
+    public int getHealthPoints() {
+        return healthPoints;
+    }
+    public int getPositionX() {
+        return positionX;
+    }
+    public int getPositionY() {
+        return positionY;
+    }
+
     public void moveUp() {
         positionY += 1;
 

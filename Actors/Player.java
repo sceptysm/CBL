@@ -14,7 +14,7 @@ public class Player extends Actor {
         defense = 1;
         agility = 1;
 
-        System.out.println("HP :" + healthPoints);
-        System.out.println("Strength :" + strength);
+        System.out.println("Player HP: " + healthPoints);
+        System.out.println("Player Strength: " + strength);
     }
 }

@@ -1,6 +1,6 @@
 package Items;
 
-public class Expendables {
+public class Consumables {
     
     void use() {
         // player uses the item. 

@@ -1,6 +1,7 @@
 package Actors;
 
 import java.util.Vector;
+import Items.Item; //Might cause issues when different types of items are introduced. 
 
 /**
  *  Parent object for PC and NPCs.
@@ -10,41 +11,19 @@ public class Actor {
     int positionY;
 
     //in game stats
-    int healthPoints;
-    int strength;
-    int defense;
-    int agility;
-    
+    public int healthPoints;
+    public int strength;
+    public int defense;
+    public int agility;
     public int coins;
 
-    public Vector<Object> inventory = new Vector<>();
+    //in game inventory of items
+    public Vector<Item> inventory = new Vector<>();
 
 
-    //initialize a representation for the actor.
+    //initialize a representation for the actor (such as a sprite).
 
-    // Getters for fields of Actor.
-    public int getStrength() {
-        return strength;
-    }
-    public int getAgility() {
-        return agility;
-    }
-    public int getDefense() {
-        return defense;
-    }
-    public Vector<Object> getInventory() {
-        return inventory;
-    }
-    public int getHealthPoints() {
-        return healthPoints;
-    }
-    public int getPositionX() {
-        return positionX;
-    }
-    public int getPositionY() {
-        return positionY;
-    }
-
+    // Movement methods for each Actor. 
     public void moveUp() {
         positionY += 1;
 

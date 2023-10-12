@@ -9,5 +9,7 @@ public abstract class Room {
 
     int SIZE_X; // X Diameter of the Room.
     int SIZE_Y; // Y Diameter of the Room. 
+
+    
     
 }

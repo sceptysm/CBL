@@ -7,15 +7,32 @@ import Actors.*;
  */
 public class Combat {
 
-    Player player;
-    Monster monster;
+    Actor attacker;
+    Actor defender;
 
-    public Combat(Player p, Monster m) {
-        player = p;
-        monster = m;
+    /**
+     *  Constructor.
+     */
+    public Combat(Actor a, Actor d) {
+        attacker = a;
+        defender = d;
     }
-    //Combat condition
-    public void combat() {
+    
+    /**
+     * General Idea of combat. 
+     * Missing evade and defense check.
+     * 
+     */
+    public void attack() {
+
+        // Attack Method. 
+        // Attacker attacks first.
+        System.out.println("Defender now has " + defender.healthPoints + " HP");
+
+        defender.healthPoints -= attacker.strength;
+        
+        System.out.println("Attacker attacks for: " + attacker.strength);
+        System.out.println("Defender now has " + defender.healthPoints + " HP");
 
     }
     

@@ -1,15 +1,12 @@
 package Actors;
 
 public class Monster extends Actor {
-
+    
     int level;
     int experiencePointWorth;
 
-    public Monster() {
-
-        //arbitrary position
-        positionX = 1;
-        positionY = 1;
+    public Monster(int posX, int posY) {
+        super(posX, posY);
 
         //stats initialization
         healthPoints = 5;

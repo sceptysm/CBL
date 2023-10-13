@@ -14,7 +14,7 @@ interface Paintable {
 public abstract class Room implements Paintable {
 
     private static final int ROOM_SIZE = 9; // The dimension size of a room.   
-    private Tile[][] tileSet = new Tile[ROOM_SIZE][ROOM_SIZE];
+    public Tile[][] tileSet = new Tile[ROOM_SIZE][ROOM_SIZE];
     public Tile special;
 
     // variables used in traverse algorithm
@@ -48,16 +48,16 @@ public abstract class Room implements Paintable {
     public void generateRoom (int stageNumber){
         // line the outside of the room with walls
         for (int i = 0; i < Room.ROOM_SIZE; i++){
-            tileSet[i][0] = new Wall();
+            tileSet[i][0] = new Wall(i, 0);
         }
         for (int i = 0; i < Room.ROOM_SIZE; i++){
-            tileSet[0][i] = new Wall();
+            tileSet[0][i] = new Wall(0, i);
         }
         for (int i = 0; i < Room.ROOM_SIZE; i++){
-            tileSet[ROOM_SIZE - 1][i] = new Wall();
+            tileSet[ROOM_SIZE - 1][i] = new Wall(ROOM_SIZE - 1, i);
         }
         for (int i = 0; i < Room.ROOM_SIZE; i++){
-            tileSet[i][ROOM_SIZE - 1] = new Wall();
+            tileSet[i][ROOM_SIZE - 1] = new Wall(i, ROOM_SIZE - 1);
         }
 
         // spawn enemies/treasure/actors - NUMBERS SUBJECT TO CHANGE
@@ -73,7 +73,7 @@ public abstract class Room implements Paintable {
             if (tileSet[j][k] != null){
                 i--;
             } else {
-                tileSet[j][k] = new Monster();
+                tileSet[j][k] = new Monster(j, k);
             }
         }
 
@@ -87,7 +87,7 @@ public abstract class Room implements Paintable {
                 // if yes, do nothing but do not count this toward the loop
                 i--;
             } else {
-                tileSet[j][k] = new Treasure();
+                tileSet[j][k] = new Treasure(j, k);
             }
         }
 
@@ -103,16 +103,16 @@ public abstract class Room implements Paintable {
     public void generateDoors () {
         // method will be modified once door functionality is finished
         if (northRoom != null) {
-            tileSet[0][4] = new Door();
+            tileSet[0][4] = new Door(0, 4);
         }
         if (eastRoom != null) {
-            tileSet[4][8] = new Door();
+            tileSet[4][8] = new Door(4, 8);
         }
         if (southRoom != null) {
-            tileSet[8][4] = new Door();
+            tileSet[8][4] = new Door(8, 4);
         }
         if (westRoom != null) {
-            tileSet[4][0] = new Door();
+            tileSet[4][0] = new Door(4, 0);
         }
     }
 
@@ -184,7 +184,7 @@ class DungeonRoom extends Room {
 
     DungeonRoom (int nr) {
         super(nr);
-        special = new Treasure();
+        special = new Treasure(4, 4);
 
         // modifiers
         enemySpawnModifier = 1.0;
@@ -201,7 +201,7 @@ class TreasureRoom extends Room {
 
     TreasureRoom (int nr) {
         super(nr);
-        special = new Monster();
+        special = new Monster(4, 4);
 
         // modifiers
         enemySpawnModifier = 0.0;

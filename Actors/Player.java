@@ -17,7 +17,8 @@ public class Player extends Actor {
         agility = 1;
         inventory = new Vector<Item>();
     }
-
+    
+    // THIS METHOD RIGHT HERE IS JUST A TEMPLATE/TEMPORARY
     // !!! would probably be best to implement this method to all actors that can move
     // then we can iterate through every actor in the room, do the movement, resolve everything
     // and THEN we draw the room at the very end to save computational shit

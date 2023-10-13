@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -11,7 +13,7 @@ import javax.swing.JPanel;
  * own size of tiles and visuals are to still to be implemented.
  * 
 */
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel{
 
     //SCREEN SETTINGS 
     final int originalTileSize = 16;

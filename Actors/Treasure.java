@@ -15,7 +15,8 @@ public class Treasure extends Actor {
     /**
      * Constructor for the Treasure child class.
      */
-    public Treasure() {
+    public Treasure(int posX, int posY) {
+        super(posX, posY);
 
         /* Acts as a healthless sprite right from the get-go.
         *  Hence moving into this actor results in interacting with the Treasure actor

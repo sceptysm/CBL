@@ -38,10 +38,10 @@ public class Main {
         encounter.attack();
         */
 
-        Stage s = new Stage(3);
+        Stage s = new Stage(6);
         s.generateStage(s.startRoom);
-        s.printtest();
-        s.traverseStage(s.startRoom);
+        s.printtest(); // prints out all rooms (in order of creation without relationships)
+        //s.traverseStage(s.startRoom); // traverses stage, prints out relationships between rooms w/o content of rooms
     }
 
 }

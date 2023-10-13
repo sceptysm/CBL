@@ -18,6 +18,5 @@ public class Monster extends Actor {
         agility = 1;
         
         coins = random.nextInt(1, 9);
-
     }
 }

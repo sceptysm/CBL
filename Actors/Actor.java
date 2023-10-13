@@ -4,13 +4,14 @@ import Items.Item; //Might cause issues when different types of items are introd
 import java.util.Random;
 import java.util.Vector;
 
+import Environment.Tile;
+
 /**
  *  Parent object for PC and NPCs.
  */
-public class Actor {
+
+public class Actor extends Tile {
     //fields used for game generation.
-    int positionX;
-    int positionY;
     Random random = new Random();
 
     //in game stats
@@ -20,40 +21,29 @@ public class Actor {
     public int agility;
     public int coins;
 
-
     //in game inventory of items
     public Vector<Item> inventory;
 
+    Actor (int posX, int posY){
+        super(posX, posY);
+    }
 
     //initialize a representation for the actor (such as a sprite).
 
     // Movement methods for each Actor. 
     public void moveUp() {
         positionY += 1;
-
-        System.out.println("this actor has Y: " + this.positionY);
-        System.out.println("this actor has X: " + this.positionX);
-
     }
 
     public void moveDown() {
         positionY -= 1;
-
-        System.out.println("this actor has Y: " + this.positionY);
-        System.out.println("this actor has X: " + this.positionX);
     }
 
     public void moveLeft() {
         positionX -= 1;
-
-        System.out.println("this actor has Y: " + this.positionY);
-        System.out.println("this actor has X: " + this.positionX);
     }
 
     public void moveRight() {
         positionX += 1;
-
-        System.out.println("this actor has Y: " + this.positionY);
-        System.out.println("this actor has X: " + this.positionX);
     }
 }

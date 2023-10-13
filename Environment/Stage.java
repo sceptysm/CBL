@@ -42,7 +42,8 @@ public class Stage {
     // method to print out all elements of the test vector
     public void printtest(){
         for (int i = 0; i < test.size(); i++){
-            System.out.println(test.elementAt(i).getType() + test.elementAt(i).getRoomNumber());
+            System.out.println(test.elementAt(i).getRoomNumber() + ". " + test.elementAt(i).getType());
+            test.elementAt(i).printRoom();
         }
     }
 
@@ -76,25 +77,43 @@ public class Stage {
             Room end = new EndRoom(currentNumberOfRooms);
 
             if (currentRoom.northRoom!=null && !hasEnd) {
+                // establish a 2 way connection
                 currentRoom.southRoom = end;
+                currentRoom.southRoom.northRoom = currentRoom;
+
+                // generate the room
+                end.generateRoom(stageNumber);
+
+                // do things necessary for algorithm
                 currentNumberOfRooms++;
                 test.add(currentRoom.southRoom);
+
+                // make sure there is only one end room per stage
                 hasEnd = true;
             }
             if (currentRoom.eastRoom!=null && !hasEnd) {
                 currentRoom.westRoom = end;
+                currentRoom.westRoom.eastRoom = currentRoom;
+                end.generateRoom(stageNumber);
+
                 currentNumberOfRooms++;
                 test.add(currentRoom.westRoom);
                 hasEnd = true;
             }
             if (currentRoom.southRoom!=null && !hasEnd) {
                 currentRoom.northRoom = end;
+                currentRoom.northRoom.southRoom = currentRoom;
+                end.generateRoom(stageNumber);
+
                 currentNumberOfRooms++;
                 test.add(currentRoom.northRoom);
                 hasEnd = true;
             }
             if (currentRoom.westRoom!=null && !hasEnd) {
                 currentRoom.eastRoom = end;
+                currentRoom.eastRoom.westRoom = currentRoom;
+                end.generateRoom(stageNumber);
+
                 currentNumberOfRooms++;
                 test.add(currentRoom.eastRoom);
                 hasEnd = true;
@@ -157,6 +176,8 @@ public class Stage {
             currentNumberOfRooms--;
             generateStage(currentRoom);
         }
+
+        currentRoom.generateRoom(stageNumber);
     }
 
     public void traverseStage (Room currentRoom){

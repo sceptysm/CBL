@@ -1,4 +1,4 @@
-import Actors.*;
+import actors.*;
 
 /**
  * Class that handles in-game combat.

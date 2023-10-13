@@ -1,8 +1,9 @@
-package Actors;
+package actors;
 
-import Items.Item; //Might cause issues when different types of items are introduced. 
 import java.util.Random;
 import java.util.Vector;
+
+import items.Item;
 
 /**
  *  Parent object for PC and NPCs.
@@ -29,7 +30,7 @@ public class Actor {
 
     // Movement methods for each Actor. 
     public void moveUp() {
-        positionY += 1;
+        positionY -= 16;
 
         System.out.println("this actor has Y: " + this.positionY);
         System.out.println("this actor has X: " + this.positionX);
@@ -37,23 +38,30 @@ public class Actor {
     }
 
     public void moveDown() {
-        positionY -= 1;
+        positionY += 16;
 
         System.out.println("this actor has Y: " + this.positionY);
         System.out.println("this actor has X: " + this.positionX);
     }
 
     public void moveLeft() {
-        positionX -= 1;
+        positionX -= 16;
 
         System.out.println("this actor has Y: " + this.positionY);
         System.out.println("this actor has X: " + this.positionX);
     }
 
     public void moveRight() {
-        positionX += 1;
+        positionX += 16;
 
         System.out.println("this actor has Y: " + this.positionY);
         System.out.println("this actor has X: " + this.positionX);
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+    public int getPositionY() {
+        return positionY;
     }
 }

@@ -1,4 +1,4 @@
-package Actors;
+package actors;
 
 public class Monster extends Actor {
 

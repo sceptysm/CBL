@@ -1,6 +1,4 @@
-package Environment;
-
-import javax.xml.parsers.DocumentBuilder;
+package environment;
 
 interface Paintable {
     String getType();
@@ -18,7 +16,10 @@ public abstract class Room implements Paintable{
 
     // variables used in traverse algorithm
     private int roomNumber;
-    public boolean northBranchVisit, eastBranchVisit, southBranchVisit, westBranchVisit;
+    public boolean northBranchVisit;
+    boolean eastBranchVisit;
+    boolean southBranchVisit;
+    boolean westBranchVisit;
 
     //Pointers to other rooms in the general 4 directions.
     Room northRoom;

@@ -1,7 +1,8 @@
-package Actors;
+package actors;
 
-import Items.Item;
 import java.util.Vector;
+
+import items.Item;
 
 
 /**

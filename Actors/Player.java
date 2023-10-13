@@ -1,14 +1,15 @@
-package Actors;
+package actors;
 
-import Items.Item;
 import java.util.Vector;
+
+import items.Item;
 
 public class Player extends Actor {
 
 
     public Player() {
-        positionX = 0;
-        positionY = 0;
+        positionX = 48;
+        positionY = 48;
 
         healthPoints = 20;
         strength = 1;
@@ -19,6 +20,10 @@ public class Player extends Actor {
         System.out.println("Player HP: " + healthPoints);
         System.out.println("Player Strength: " + strength);
     }
+
+    
+
+
 
     //method for attacking
 

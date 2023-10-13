@@ -1,4 +1,4 @@
-package Environment;
+package environment;
 
 import java.util.Random;
 import java.util.Vector;
@@ -14,11 +14,16 @@ public class Stage {
     //enemies tougher and drop stronger loot (it should act as a stat modifier) and 
     //the main determinant of amount of rooms inside of a single stage.
 
-    public int stageNumber, currentNumberOfRooms, roomCapacity;
-    public Room startRoom, endRoom;
+    int stageNumber;
+    int currentNumberOfRooms;
+    int roomCapacity;
+    Room startRoom; 
+    Room endRoom;
     private Random random;
     private boolean hasEnd;
 
+
+    // Test? 
     private Vector<Room> test;
 
     public Stage (int stageNr) {
@@ -40,8 +45,8 @@ public class Stage {
     }
 
     // method to print out all elements of the test vector
-    public void printtest(){
-        for (int i = 0; i < test.size(); i++){
+    public void printTest() {
+        for (int i = 0; i < test.size(); i++) {
             System.out.println(test.elementAt(i).getType() + test.elementAt(i).getRoomNumber());
         }
     }
@@ -58,42 +63,42 @@ public class Stage {
         boolean genWest = random.nextBoolean();
 
         // run a check to see which door you "came" from
-        if (currentRoom.northRoom!=null) {
+        if (currentRoom.northRoom != null) {
             genNorth = false;
         }
-        if (currentRoom.eastRoom!=null) {
+        if (currentRoom.eastRoom != null) {
             genEast = false;
         }
-        if (currentRoom.southRoom!=null) {
+        if (currentRoom.southRoom != null) {
             genSouth = false;
         }
-        if (currentRoom.westRoom!=null) {
+        if (currentRoom.westRoom != null) {
             genWest = false;
         }
 
         // if algorithm is at the end, generate a single end room
-        if (currentNumberOfRooms > roomCapacity-1){
+        if (currentNumberOfRooms > roomCapacity - 1) {
             Room end = new EndRoom(currentNumberOfRooms);
 
-            if (currentRoom.northRoom!=null && !hasEnd) {
+            if (currentRoom.northRoom != null && !hasEnd) {
                 currentRoom.southRoom = end;
                 currentNumberOfRooms++;
                 test.add(currentRoom.southRoom);
                 hasEnd = true;
             }
-            if (currentRoom.eastRoom!=null && !hasEnd) {
+            if (currentRoom.eastRoom != null && !hasEnd) {
                 currentRoom.westRoom = end;
                 currentNumberOfRooms++;
                 test.add(currentRoom.westRoom);
                 hasEnd = true;
             }
-            if (currentRoom.southRoom!=null && !hasEnd) {
+            if (currentRoom.southRoom != null && !hasEnd) {
                 currentRoom.northRoom = end;
                 currentNumberOfRooms++;
                 test.add(currentRoom.northRoom);
                 hasEnd = true;
             }
-            if (currentRoom.westRoom!=null && !hasEnd) {
+            if (currentRoom.westRoom != null && !hasEnd) {
                 currentRoom.eastRoom = end;
                 currentNumberOfRooms++;
                 test.add(currentRoom.eastRoom);
@@ -113,9 +118,10 @@ public class Stage {
             //generate a random variable that determines what type of room is to be generated
             randomVariable = Math.random();
             if (randomVariable < 0.2) {
-            tempRoom = new TreasureRoom(currentNumberOfRooms);
-            } else tempRoom = new DungeonRoom(currentNumberOfRooms);
-
+                tempRoom = new TreasureRoom(currentNumberOfRooms);
+            } else {
+                tempRoom = new DungeonRoom(currentNumberOfRooms);
+            }
             currentRoom.northRoom = tempRoom;
             currentRoom.northRoom.southRoom = currentRoom;
             generateStage(currentRoom.northRoom);
@@ -123,8 +129,10 @@ public class Stage {
         if (genEast) {
             randomVariable = Math.random();
             if (randomVariable < 0.2) {
-            tempRoom = new TreasureRoom(currentNumberOfRooms);
-            } else tempRoom = new DungeonRoom(currentNumberOfRooms);
+                tempRoom = new TreasureRoom(currentNumberOfRooms);
+            } else {
+                tempRoom = new DungeonRoom(currentNumberOfRooms); 
+            }
 
             currentRoom.eastRoom = tempRoom;
             currentRoom.eastRoom.westRoom = currentRoom;
@@ -133,9 +141,10 @@ public class Stage {
         if (genSouth) {
             randomVariable = Math.random();
             if (randomVariable < 0.2) {
-            tempRoom = new TreasureRoom(currentNumberOfRooms);
-            } else tempRoom = new DungeonRoom(currentNumberOfRooms);
-
+                tempRoom = new TreasureRoom(currentNumberOfRooms);
+            } else {
+                tempRoom = new DungeonRoom(currentNumberOfRooms);
+            }
             currentRoom.southRoom = tempRoom;
             currentRoom.southRoom.northRoom = currentRoom;
             generateStage(currentRoom.southRoom);
@@ -143,8 +152,10 @@ public class Stage {
         if (genWest) {
             randomVariable = Math.random();
             if (randomVariable < 0.2) {
-            tempRoom = new TreasureRoom(currentNumberOfRooms);
-            } else tempRoom = new DungeonRoom(currentNumberOfRooms);
+                tempRoom = new TreasureRoom(currentNumberOfRooms);
+            } else {
+                tempRoom = new DungeonRoom(currentNumberOfRooms);
+            }
 
             currentRoom.westRoom = tempRoom;
             currentRoom.westRoom.eastRoom = currentRoom;
@@ -164,36 +175,40 @@ public class Stage {
         System.out.println("TYPE: " + currentRoom.getType());
         String neighbors = "";
 
-        if (currentRoom.northRoom!=null) {
+        if (currentRoom.northRoom != null) {
             neighbors += "NORTH: " + currentRoom.northRoom.getType() + " ";
         }
-        if (currentRoom.eastRoom!=null) {
+        if (currentRoom.eastRoom != null) {
             neighbors += "EAST: " + currentRoom.eastRoom.getType() + " ";
         }
-        if (currentRoom.southRoom!=null) {
+        if (currentRoom.southRoom != null) {
             neighbors += "SOUTH: " + currentRoom.southRoom.getType() + " ";
         }
-        if (currentRoom.westRoom!=null) {
+        if (currentRoom.westRoom != null) {
             neighbors += "WEST: " + currentRoom.westRoom.getType() + " ";
         }
 
         System.out.println(neighbors);
 
-        if (currentRoom.northRoom!=null && !currentRoom.northBranchVisit) {
+        if (currentRoom.northRoom != null && !currentRoom.northBranchVisit) {
             currentRoom.northBranchVisit = true;
             traverseStage(currentRoom.northRoom);
         }
-        if (currentRoom.eastRoom!=null && !currentRoom.eastBranchVisit) {
+        if (currentRoom.eastRoom != null && !currentRoom.eastBranchVisit) {
             currentRoom.eastBranchVisit = true;
             traverseStage(currentRoom.eastRoom);
         }
-        if (currentRoom.southRoom!=null && !currentRoom.southBranchVisit) {
+        if (currentRoom.southRoom != null && !currentRoom.southBranchVisit) {
             currentRoom.southBranchVisit = true;
             traverseStage(currentRoom.southRoom);
         }
-        if (currentRoom.westRoom!=null && !currentRoom.westBranchVisit) {
+        if (currentRoom.westRoom != null && !currentRoom.westBranchVisit) {
             currentRoom.westBranchVisit = true;
             traverseStage(currentRoom.westRoom);
         }
+    }
+
+    public Room getStartRoom() {
+        return startRoom;
     }
 }

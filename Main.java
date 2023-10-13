@@ -1,7 +1,9 @@
 import javax.swing.JFrame;
-import Actors.*;
-import Environment.*;
-import Items.*;
+
+import actors.*;
+import environment.*;
+import items.*;
+import gui.GamePanel;
 
 /**
  * Test method for draft classes and interactions.
@@ -11,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        /*
+        
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -24,9 +26,9 @@ public class Main {
  
         frame.setLocationRelativeTo(null); //Displayed at center of the screen
         frame.setVisible(true);
-        */
         
-        /*
+        
+        
         Player player = new Player();
         Monster monster =  new Monster();
 
@@ -36,12 +38,12 @@ public class Main {
 
         Combat encounter = new Combat(player, monster);
         encounter.attack();
-        */
+        
 
         Stage s = new Stage(3);
-        s.generateStage(s.startRoom);
-        s.printtest();
-        s.traverseStage(s.startRoom);
+        s.generateStage(s.getStartRoom());
+        s.printTest();
+        s.traverseStage(s.getStartRoom());
     }
 
 }

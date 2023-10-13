@@ -14,7 +14,7 @@ public class Tile {
      * @param j Index obtained through paintRoom() method.
      */
 
-    Tile (int posX, int posY){
+    public Tile (int posX, int posY){
         this.positionX = posX;
         this.positionY = posY;
     }

@@ -1,8 +1,5 @@
 package Environment;
 
-import Actors.Actor;
-
-
 public class Tile {
     private static final int TILE_SIZE = 100; // Diameter of the Room.
     public int positionX, positionY;

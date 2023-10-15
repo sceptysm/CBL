@@ -123,7 +123,7 @@ public abstract class Room implements Paintable {
                     System.out.print("[/]");
                 }
                 else if (tileSet[i][j] instanceof Door){
-                    System.out.print("| |");
+                    System.out.print("   ");
                 }
                 else if (tileSet[i][j] instanceof Player){
                     System.out.print(" @ ");
@@ -184,7 +184,9 @@ class DungeonRoom extends Room {
 
     DungeonRoom (int nr) {
         super(nr);
-        special = new Treasure(4, 4);
+        //special = new Treasure(4, 4);
+        special = null;
+
 
         // modifiers
         enemySpawnModifier = 1.0;

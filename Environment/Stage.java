@@ -40,7 +40,7 @@ public class Stage {
     }
 
     // method to print out all elements of the test vector
-    public void printtest(){
+    public void printTest(){
         for (int i = 0; i < test.size(); i++){
             System.out.println(test.elementAt(i).getRoomNumber() + ". " + test.elementAt(i).getType());
             test.elementAt(i).printRoom();

@@ -8,8 +8,8 @@ public class Player extends Actor {
 
 
     public Player() {
-        positionX = 48;
-        positionY = 48;
+        positionX = 1;
+        positionY = 3;
 
         healthPoints = 20;
         strength = 1;

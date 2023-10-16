@@ -5,6 +5,7 @@ import environment.*;
 import items.*;
 import gui.GamePanel;
 
+
 /**
  * Test method for draft classes and interactions.
  */
@@ -26,24 +27,11 @@ public class Main {
  
         frame.setLocationRelativeTo(null); //Displayed at center of the screen
         frame.setVisible(true);
-        
-        
-        
+
+
         Player player = new Player();
-        Monster monster =  new Monster();
 
-        player.moveUp();
-        player.moveRight();
-        player.moveLeft();
 
-        Combat encounter = new Combat(player, monster);
-        encounter.attack();
-        
-
-        Stage s = new Stage(3);
-        s.generateStage(s.getStartRoom());
-        s.printTest();
-        s.traverseStage(s.getStartRoom());
     }
 
 }

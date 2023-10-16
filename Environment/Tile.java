@@ -4,10 +4,12 @@ import actors.Actor;
 
 
 public class Tile {
-
     
-    private static final int TILE_SIZE = 1; // Diameter of the Room.
-    Actor occupant; //Actor at tile.
+    public Actor occupant; //Actor at tile.
+
+    Tile() {
+        occupant = null;
+    }
 
     /**
      * Method that paints a single Tile. 
@@ -26,8 +28,5 @@ public class Tile {
     }
 
     // Get methods for tile fields.
-    public int getTileSize() {
-        return TILE_SIZE;
-    }
 
 }

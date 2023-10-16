@@ -1,5 +1,7 @@
 package environment;
 
+import actors.Actor;
+
 interface Paintable {
     String getType();
 }
@@ -9,10 +11,10 @@ interface Paintable {
  * Class for Room objects which together create the environment in
  * which the game takes place.
  */
-public abstract class Room implements Paintable{
+public abstract class Room implements Paintable {
 
-    private static final int ROOM_SIZE = 9; // The dimension size of a room.   
-    private static Tile[][] tileSet = new Tile[ROOM_SIZE][ROOM_SIZE];
+    private static final int ROOM_SIZE = 7; // The dimension size of a room.   
+    Tile[][] tileSet;
 
     // variables used in traverse algorithm
     private int roomNumber;
@@ -27,33 +29,54 @@ public abstract class Room implements Paintable{
     Room westRoom;
     Room southRoom;
 
-    Room (int nr) {
+    Room(int nr) {
+
         this.roomNumber = nr;
+        tileSet = new Tile[ROOM_SIZE][ROOM_SIZE];
         northBranchVisit = eastBranchVisit = southBranchVisit = westBranchVisit = false;
+
+
     }
 
-    int getRoomNumber(){
+    int getRoomNumber() {
         return roomNumber;
     }
 
     /**
-     *  Method that paints the room.
+     * Method that returns the actor at a given location. 
+     * The "in front of" is determined by the passed arguments.
+     * 
+     * @param posX
+     * @param posY
+     * @return
      */
-
-    void paintRoom() {
-
-        //Iterate through the tileSet array and paint each tile.
-        for (int i = 0; i < tileSet.length; i++) {
-            for (int j = 0; j < tileSet[i].length; j++) {
-                tileSet[i][j].paintTile(i, j);
-            }
+    public Actor getInFrontOf(int posX, int posY) {
+ 
+        //If there is an occupant (something on a tile)
+        if (tileSet[posX][posY].occupant != null) {
+            return tileSet[posX][posY].occupant;
+        } else { //If there is nothing
+            return null;
         }
+    
     }
+
+    public Tile[][] getTileSet() {
+        return tileSet;
+    }
+
+    public int getRoomSize() {
+        return ROOM_SIZE;
+    }
+
+
+
+    
 }
 
 class StartRoom extends Room {
 
-    StartRoom (int nr) {
+    StartRoom(int nr) {
         super(nr);
     }
 
@@ -65,7 +88,7 @@ class StartRoom extends Room {
 
 class DungeonRoom extends Room {
 
-    DungeonRoom (int nr) {
+    DungeonRoom(int nr) {
         super(nr);
     }
 
@@ -77,7 +100,7 @@ class DungeonRoom extends Room {
 
 class TreasureRoom extends Room {
 
-    TreasureRoom (int nr) {
+    TreasureRoom(int nr) {
         super(nr);
     }
 
@@ -89,7 +112,7 @@ class TreasureRoom extends Room {
 
 class EndRoom extends Room {
 
-    EndRoom (int nr) {
+    EndRoom(int nr) {
         super(nr);
     }
 

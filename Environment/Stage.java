@@ -1,5 +1,8 @@
 package environment;
 
+import actors.Actor;
+import actors.Monster;
+import actors.Player;
 import java.util.Random;
 import java.util.Vector;
 
@@ -19,6 +22,8 @@ public class Stage {
     int roomCapacity;
     Room startRoom; 
     Room endRoom;
+    public Player player;
+    public Actor testMonster;
     private Random random;
     private boolean hasEnd;
 
@@ -26,12 +31,19 @@ public class Stage {
     // Test? 
     private Vector<Room> test;
 
-    public Stage (int stageNr) {
+    /**
+     * Constructor for the stage object when the game commences.
+     * 
+     */
+    public Stage() {
 
-        stageNumber = stageNr; // number of the stage
+        stageNumber = 1; // number of the stage
+
+        
+        
 
         // ALGORITHM VARIABLES
-        roomCapacity = 2 + stageNr; // total amount of rooms in the stage
+        roomCapacity = 2 + stageNumber; // total amount of rooms in the stage
         currentNumberOfRooms = 1; // variable used for generateStage() algorithm
         this.hasEnd = false; // hasEnd check used in algorithm
 
@@ -40,9 +52,63 @@ public class Stage {
         // initialize Random
         this.random = new Random();
 
+        // initialize player in the start room. 
+        player = new Player();
+        player.currentRoom = startRoom;
+        testMonster = startRoom.tileSet[5][6].occupant;
+        testMonster.currentRoom = startRoom;
+        startRoom.tileSet[player.getPositionX()][player.getPositionY()].occupant = player;
+
+        
         // initialize the test vector, used for testing the algorithm
         this.test = new Vector<>();
+        generateStage(startRoom);
     }
+
+    /**
+     * Constructor for the stage object when it is invoked 
+     * as a next stage rather than the first stage, in other words,
+     * when the player already exists. REWRITE
+     * 
+     * @param stageNr the number of the stage
+     * @param p the player actor object
+     */
+    public Stage(int stageNr, Player p) {
+
+        stageNumber = stageNr; // number of the stage
+
+
+        // ALGORITHM VARIABLES
+        roomCapacity = 2 + stageNumber; // total amount of rooms in the stage
+        currentNumberOfRooms = 1; // variable used for generateStage() algorithm
+        this.hasEnd = false; // hasEnd check used in algorithm
+
+        // initalize the stage with just a startroom
+        this.startRoom = new StartRoom(currentNumberOfRooms);
+        // initialize Random
+        this.random = new Random();
+
+        // initialize player in the start room. 
+        player = p;
+        player.currentRoom = startRoom;
+        startRoom.tileSet[player.getPositionX()][player.getPositionY()].occupant = player;
+
+
+
+        // initialize the test vector, used for testing the algorithm
+        this.test = new Vector<>();
+        generateStage(startRoom);
+
+
+    }
+
+
+
+
+
+
+
+    // Stage generation methods : 
 
     // method to print out all elements of the test vector
     public void printTest() {

@@ -1,6 +1,7 @@
 package environment;
 
 import actors.Actor;
+import actors.Monster;
 
 interface Paintable {
     String getType();
@@ -14,7 +15,7 @@ interface Paintable {
 public abstract class Room implements Paintable {
 
     private static final int ROOM_SIZE = 7; // The dimension size of a room.   
-    Tile[][] tileSet;
+    public Tile[][] tileSet;
 
     // variables used in traverse algorithm
     private int roomNumber;
@@ -71,7 +72,7 @@ public abstract class Room implements Paintable {
     
     }
 
-    public Tile[][] getTileSet() {
+    public Tile[][] tileSet() {
         return tileSet;
     }
 
@@ -101,6 +102,8 @@ class StartRoom extends Room {
 
     StartRoom(int nr) {
         super(nr);
+        tileSet[5][6].occupant = new Monster();
+
     }
 
     @Override
@@ -113,6 +116,13 @@ class DungeonRoom extends Room {
 
     DungeonRoom(int nr) {
         super(nr);
+
+        // Initialize number of monster based on stage number 
+
+        int numOfMonsters = 1;
+
+        // Assign monsters to tiles.
+        tileSet[5][6].occupant = new Monster();
     }
 
     @Override

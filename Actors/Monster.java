@@ -8,8 +8,9 @@ public class Monster extends Actor {
     public Monster() {
 
         //arbitrary position
-        positionX = 1;
-        positionY = 1;
+        positionX = 5;
+        positionY = 6;
+        updateRenderPosition();
 
         //stats initialization
         healthPoints = 5;

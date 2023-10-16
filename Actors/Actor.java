@@ -37,7 +37,11 @@ public class Actor {
 
     // Movement methods for each Actor. 
 
-    
+    //Constructor for actor not yet used
+    public Actor() {
+
+        updateRenderPosition();
+    }
     public void moveUp() {
 
         //Checks what is in front of the actor
@@ -52,11 +56,12 @@ public class Actor {
         inFrontOf = currentRoom.getInFrontOf(positionX, positionY - 1);
         if (inFrontOf == null) { // if tile in front of is not occupied 
             deleteFromCurrentTile();
-            currentRoom.getTileSet()[positionX][positionY - 1].occupant = this;
+            currentRoom.tileSet[positionX][positionY - 1].occupant = this;
             positionY -= 1;
             updateRenderPosition();
 
         } else {
+            System.out.println("in 4");
             interact(inFrontOf);
         }
 
@@ -78,11 +83,12 @@ public class Actor {
         inFrontOf = currentRoom.getInFrontOf(positionX, positionY + 1);
         if (inFrontOf == null) { // if tile in front of is not occupied 
             deleteFromCurrentTile();
-            currentRoom.getTileSet()[positionX][positionY + 1].occupant = this;
+            currentRoom.tileSet[positionX][positionY + 1].occupant = this;
             positionY += 1;
             updateRenderPosition();
 
         } else {
+
             interact(inFrontOf);
         }
 
@@ -102,7 +108,7 @@ public class Actor {
         inFrontOf = currentRoom.getInFrontOf(positionX - 1, positionY);
         if (inFrontOf == null) { // if tile in front of is not occupied 
             deleteFromCurrentTile();
-            currentRoom.getTileSet()[positionX - 1][positionY].occupant = this;
+            currentRoom.tileSet[positionX - 1][positionY].occupant = this;
             positionX -= 1;
             updateRenderPosition();
 
@@ -128,12 +134,14 @@ public class Actor {
         inFrontOf = currentRoom.getInFrontOf(positionX + 1, positionY);
         if (inFrontOf == null) { // if tile in front of is not occupied 
             deleteFromCurrentTile();
-            currentRoom.getTileSet()[positionX + 1][positionY].occupant = this;
+            currentRoom.tileSet[positionX + 1][positionY].occupant = this;
             positionX += 1;
             updateRenderPosition();
 
         } else {
+            System.out.println("In3");
             interact(inFrontOf);
+            
         }
 
     }
@@ -151,9 +159,14 @@ public class Actor {
 
         if (interactee.healthPoints <= 0) { //If the HP 
             //loot the dead body: 
-            interactee.giveCoins();
+            System.out.println("Looting");
+            coins = interactee.giveCoins();
+            System.out.println("I now have: " + coins + " coins");
+            interactee.healthPoints = -1; // test
+            interactee.deleteFromCurrentTile();
             
         } else {
+            System.out.println("Here");
             attack(interactee);
         }
     }
@@ -186,17 +199,23 @@ public class Actor {
     // Utility Methods : 
 
     /**
-     *  Method that updates the position where an Actor is rendered on the JPanel.
+     * Method that updates the position where an Actor is rendered on the JPanel.
      */
     void updateRenderPosition() {
         renderPositionX = positionX * tileSize;
         renderPositionY = positionY * tileSize;
     }
 
+    /**
+     * Method that nulls the occupant at the index position of this actor
+     * in the current room.
+     */
     void deleteFromCurrentTile() {
-        currentRoom.getTileSet()[positionX][positionY].occupant = null;
+        currentRoom.tileSet[positionX][positionY].occupant = null;
 
     }
+
+    // Get Methods :
 
     public int getPositionX() {
         return positionX;
@@ -207,7 +226,7 @@ public class Actor {
     }
 
     public int getRenderPositionX() {
-        return renderPositionX + 192;
+        return renderPositionX + 192; //Non-variable integer is start position
     }
 
     public int getRenderPositionY() {

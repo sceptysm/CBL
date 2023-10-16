@@ -38,3 +38,12 @@ inventory. Implement a max inventory size / ability to scroll the inventory.
 give() methods inside of treasure might be moved Actor class as Monsters will also 
 likely have a similar set of methods.
 
+---
+
+THREAD SLEEPING
+---
+
+Currently, input delay is handled in the keyboard handler class. But, there might 
+be a different solution needed for a better game feel / longevity of the code / 
+render purposes. 
+

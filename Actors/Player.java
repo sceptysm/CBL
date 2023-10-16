@@ -22,11 +22,5 @@ public class Player extends Actor {
         System.out.println("Player Strength: " + strength);
     }
 
-    
 
-
-
-    //method for attacking
-
-    //method for taking items
 }

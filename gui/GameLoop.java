@@ -4,50 +4,60 @@ import actors.*;
 import environment.Stage;
 import java.awt.event.KeyEvent;
 
+
 /**
  *  Class that handles game logic. Interprets user input,
  *  and reacts accordingly. 
  */
 public class GameLoop {
 
-    KeyboardHandler keyHandler;
     MouseHandler mouseHandler;
 
-    private Player player;
-    Stage stage;
+    //Control variables
+    public static Player player;
+    public static Actor testMonster;
+    private static Stage stage;
 
+    //Variables inside the Stage
 
-    GameLoop (KeyboardHandler k, MouseHandler m, Player p, Stage s) {
+    private static Monster[] monsters;
+    private static int currentStage; 
+    
 
-        //Pass Arguments as Fields
-        keyHandler = k;
-        mouseHandler = m;
+    GameLoop() {
+        //Constructor not needed so far.
+    }
 
-        player = p;
-        stage = s;
+    public static void startGame() {
+        init();
+    }
 
-        player.currentRoom = stage.getStartRoom();
-        stage.getStartRoom().getTileSet()[player.getPositionX()][player.getPositionY()].occupant = player;
-
+    private static void init() {
+        stage = new Stage();
+        player = stage.player;
+        testMonster = stage.testMonster;
+        currentStage = 1;
+        
     }
 
     /**
      *  Updates the game loop.
      */
-    void update() {
+    public static void update() {
 
-        if (keyHandler.isKeyDown(KeyEvent.VK_W)) {
+        if (KeyboardHandler.isKeyDown(KeyEvent.VK_W)) {
             player.moveUp();
 
         } 
-        if (keyHandler.isKeyDown(KeyEvent.VK_A)) {
+        if (KeyboardHandler.isKeyDown(KeyEvent.VK_A)) {
             player.moveLeft();
         }  
-        if (keyHandler.isKeyDown(KeyEvent.VK_S)) {
+        if (KeyboardHandler.isKeyDown(KeyEvent.VK_S)) {
             player.moveDown();
         }  
-        if (keyHandler.isKeyDown(KeyEvent.VK_D)) {
+        if (KeyboardHandler.isKeyDown(KeyEvent.VK_D)) {
             player.moveRight();
         }
+        
     }
 }

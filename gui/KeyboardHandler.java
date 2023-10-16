@@ -43,7 +43,7 @@ public class KeyboardHandler implements KeyListener {
      */
     public static boolean isKeyDown(int key) {
         if (keyboardRecord[key] && pressDelay <= 0) {
-            pressDelay = 240; // Press Delay Assures that key input isn't astronomically fast.
+            pressDelay = 550; // Press Delay Assures that key input isn't astronomically fast.
             
             /*
              * Can potentially be changed into a thread sleeper later on. (not urgent)

@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
+
+import actors.Actor;
+import actors.Monster;
 import actors.Player;
 import environment.Stage;
 
@@ -22,23 +25,22 @@ public class GamePanel extends JPanel implements ActionListener {
     //Screen Configuration
     final int originalTileSize = 8;
     final int sizeScaler = 6; // Scales pixelated graphics
-    final int actualtileSize = originalTileSize * sizeScaler;
+    final int actualTileSize = originalTileSize * sizeScaler;
 
     // 4 : 3 Ratio - Number of Tiles Rendered at a time
     final int maxTilesColumn = 16;
     final int maxTilesRow = 12;
 
     //SCREEN SETTINGS determined by scaled up tiles and number of tiles rendered
-    final int screenWidth = actualtileSize * maxTilesColumn;
-    final int screenHeight = actualtileSize * maxTilesRow;
+    final int screenWidth = actualTileSize * maxTilesColumn;
+    final int screenHeight = actualTileSize * maxTilesRow;
 
 
     //Input Handlers
     KeyboardHandler keyHandler = new KeyboardHandler();
     MouseHandler mouseHandler = new MouseHandler();
-    GameLoop gameLoop;
-    Player player = new Player();
-    Stage stage;
+    Player player;
+    Actor testMonster;
 
     //Visual
 
@@ -54,11 +56,11 @@ public class GamePanel extends JPanel implements ActionListener {
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
 
-        stage = new Stage(3);
-        stage.generateStage(stage.getStartRoom());
-        gameLoop = new GameLoop(keyHandler, mouseHandler, player, stage);
+        GameLoop.startGame();
+        player = GameLoop.player;
+        testMonster = GameLoop.testMonster;
         
-        System.out.println(actualtileSize);
+        System.out.println(actualTileSize);
         System.out.println(screenHeight);
         System.out.println(screenWidth);
     }
@@ -70,10 +72,16 @@ public class GamePanel extends JPanel implements ActionListener {
         g.fillRect(0, 0, screenWidth, screenHeight);
         g.setColor(Color.WHITE);
         g.fillRect(player.getRenderPositionX(),
-            player.getRenderPositionY(), actualtileSize, actualtileSize);
+            player.getRenderPositionY(), actualTileSize, actualTileSize);
 
         
-        gameLoop.update();
+        if (testMonster.healthPoints >= 0) {
+            g.setColor(Color.RED);
+            g.fillRect(testMonster.getRenderPositionX(), testMonster.getRenderPositionY(), actualTileSize, actualTileSize);
+        }
+
+        
+        GameLoop.update();
         
         repaint();
 

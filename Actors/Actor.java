@@ -3,7 +3,6 @@ package actors;
 import environment.Room;
 import java.util.Random;
 import java.util.Vector;
-
 import items.Item;
 
 /**
@@ -15,9 +14,9 @@ public class Actor {
     int positionX; //Index in the Tile Array
     int positionY; //Index in the Tile Array
 
-    int tileSize = 8;
-    int renderPositionX = positionX * tileSize;
-    int renderPositionY = positionY * tileSize;
+    int tileSize = 48;
+    int renderPositionX;
+    int renderPositionY;
 
     Random random = new Random();
     public Room currentRoom;
@@ -37,20 +36,28 @@ public class Actor {
     //initialize a representation for the actor (such as a sprite).
 
     // Movement methods for each Actor. 
+
+    
     public void moveUp() {
 
         //Checks what is in front of the actor
         boolean onGrid = (positionY - 1) > -1;
         Actor inFrontOf;
 
-        if (onGrid) { //if in front of is a tile in the grid
-            inFrontOf = currentRoom.getInFrontOf(positionX, positionY - 1);
-            if (inFrontOf == null) { // if tile in front of is not occupied 
-                currentRoom.getTileSet()[positionX][positionY - 1].occupant = this;
-                currentRoom.getTileSet()[positionX][positionY].occupant = null;
-                positionY -= 1;
+        if (!onGrid) { //If in front of is not a tile in the grid :
+            return;
+        }
+         
+        // Else : 
+        inFrontOf = currentRoom.getInFrontOf(positionX, positionY - 1);
+        if (inFrontOf == null) { // if tile in front of is not occupied 
+            deleteFromCurrentTile();
+            currentRoom.getTileSet()[positionX][positionY - 1].occupant = this;
+            positionY -= 1;
+            updateRenderPosition();
 
-            }   
+        } else {
+            interact(inFrontOf);
         }
 
     }
@@ -63,14 +70,20 @@ public class Actor {
         boolean onGrid = (positionY + 1) < currentRoom.getRoomSize(); 
         Actor inFrontOf;
 
-        if (onGrid) { //if in front of is a tile in the grid
-            inFrontOf = currentRoom.getInFrontOf(positionX, positionY + 1);
-            if (inFrontOf == null) { // if tile in front of is not occupied 
-                currentRoom.getTileSet()[positionX][positionY + 1].occupant = this;
-                currentRoom.getTileSet()[positionX][positionY].occupant = null;
-                positionY += 1;
+        if (!onGrid) { //If in front of is not a tile in the grid :
+            return;
+        }
+         
+        // Else : 
+        inFrontOf = currentRoom.getInFrontOf(positionX, positionY + 1);
+        if (inFrontOf == null) { // if tile in front of is not occupied 
+            deleteFromCurrentTile();
+            currentRoom.getTileSet()[positionX][positionY + 1].occupant = this;
+            positionY += 1;
+            updateRenderPosition();
 
-            }   
+        } else {
+            interact(inFrontOf);
         }
 
     }
@@ -81,15 +94,21 @@ public class Actor {
         boolean onGrid = (positionX - 1) > -1;
         Actor inFrontOf;
 
-        if (onGrid) { //if in front of is a tile in the grid
-            inFrontOf = currentRoom.getInFrontOf(positionX - 1, positionY);
-            if (inFrontOf == null) { // if tile in front of is not occupied 
-                currentRoom.getTileSet()[positionX - 1][positionY].occupant = this;
-                currentRoom.getTileSet()[positionX][positionY].occupant = null;
-                positionX -= 1;
-
-            }   
+        if (!onGrid) { //If in front of is not a tile in the grid :
+            return;
         }
+         
+        // Else : 
+        inFrontOf = currentRoom.getInFrontOf(positionX - 1, positionY);
+        if (inFrontOf == null) { // if tile in front of is not occupied 
+            deleteFromCurrentTile();
+            currentRoom.getTileSet()[positionX - 1][positionY].occupant = this;
+            positionX -= 1;
+            updateRenderPosition();
+
+        } else {
+            interact(inFrontOf);
+        } 
 
     }
 
@@ -101,26 +120,91 @@ public class Actor {
         boolean onGrid = (positionX + 1) < currentRoom.getRoomSize();
         Actor inFrontOf;
 
-        if (onGrid) { //if in front of is a tile in the grid
-            inFrontOf = currentRoom.getInFrontOf(positionX + 1, positionY);
-            if (inFrontOf == null) { // if tile in front of is not occupied 
-                currentRoom.getTileSet()[positionX + 1][positionY].occupant = this;
-                currentRoom.getTileSet()[positionX][positionY].occupant = null;
-                positionX += 1;
-
-            }   
+        if (!onGrid) { //If in front of is not a tile in the grid :
+            return;
         }
+         
+        // Else : 
+        inFrontOf = currentRoom.getInFrontOf(positionX + 1, positionY);
+        if (inFrontOf == null) { // if tile in front of is not occupied 
+            deleteFromCurrentTile();
+            currentRoom.getTileSet()[positionX + 1][positionY].occupant = this;
+            positionX += 1;
+            updateRenderPosition();
+
+        } else {
+            interact(inFrontOf);
+        }
+
+    }
+
+
+    /**
+     * Method that initializes actor interaction from which further 
+     * in-game interactions are called based on the interaction required 
+     * in regards to the type/state of actor with which the this actor interacts.
+     * 
+     * @param i the actor with which this actor interacts
+     */
+    void interact(Actor i) {
+        Actor interactee = i; 
+
+        if (interactee.healthPoints <= 0) { //If the HP 
+            //loot the dead body: 
+            interactee.giveCoins();
+            
+        } else {
+            attack(interactee);
+        }
+    }
+
+    /**
+     * Method that is called when an actor attacks another actor.
+     * 
+     * @param d the defending actor
+     */
+    void attack(Actor d) {
+        Actor defender = d;
+
+        // Math determination of damage dealt to defender.
+        System.out.println("Defender now has " + defender.healthPoints + " HP");
+        defender.healthPoints -= strength;
+        System.out.println("Attacker attacks for: " + strength);
+        System.out.println("Defender now has " + defender.healthPoints + " HP");
+    }
+
+    /**
+     *  Return coins held by the actor.
+     * 
+     * @return amount of coins.
+     */
+    int giveCoins() {
+        return coins;
+    }
+
+
+    // Utility Methods : 
+
+    /**
+     *  Method that updates the position where an Actor is rendered on the JPanel.
+     */
+    void updateRenderPosition() {
+        renderPositionX = positionX * tileSize;
+        renderPositionY = positionY * tileSize;
+    }
+
+    void deleteFromCurrentTile() {
+        currentRoom.getTileSet()[positionX][positionY].occupant = null;
 
     }
 
     public int getPositionX() {
         return positionX;
     }
+    
     public int getPositionY() {
         return positionY;
     }
-
-    //Render Positions
 
     public int getRenderPositionX() {
         return renderPositionX + 192;

@@ -1,6 +1,7 @@
 package gui;
 
 import actors.*;
+import environment.Stage;
 import java.awt.event.KeyEvent;
 
 /**
@@ -12,13 +13,21 @@ public class GameLoop {
     KeyboardHandler keyHandler;
     MouseHandler mouseHandler;
 
-    private Player player = new Player();
+    private Player player;
+    Stage stage;
 
-    GameLoop (KeyboardHandler k, MouseHandler m) {
+
+    GameLoop (KeyboardHandler k, MouseHandler m, Player p, Stage s) {
 
         //Pass Arguments as Fields
         keyHandler = k;
         mouseHandler = m;
+
+        player = p;
+        stage = s;
+
+        player.currentRoom = stage.getStartRoom();
+        stage.getStartRoom().getTileSet()[player.getPositionX()][player.getPositionY()].occupant = player;
 
     }
 
@@ -26,22 +35,19 @@ public class GameLoop {
      *  Updates the game loop.
      */
     void update() {
-        if (keyHandler.keyboardRecord[KeyEvent.VK_W]) {
+
+        if (keyHandler.isKeyDown(KeyEvent.VK_W)) {
             player.moveUp();
+
         } 
-        if (keyHandler.keyboardRecord[KeyEvent.VK_A]) {
+        if (keyHandler.isKeyDown(KeyEvent.VK_A)) {
             player.moveLeft();
         }  
-        if (keyHandler.keyboardRecord[KeyEvent.VK_S]) {
+        if (keyHandler.isKeyDown(KeyEvent.VK_S)) {
             player.moveDown();
         }  
-        if (keyHandler.keyboardRecord[KeyEvent.VK_D]) {
+        if (keyHandler.isKeyDown(KeyEvent.VK_D)) {
             player.moveRight();
-        }
-        try {
-            Thread.sleep(16);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

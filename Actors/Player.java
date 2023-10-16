@@ -10,6 +10,7 @@ public class Player extends Actor {
     public Player() {
         positionX = 1;
         positionY = 3;
+        updateRenderPosition();
 
         healthPoints = 20;
         strength = 1;

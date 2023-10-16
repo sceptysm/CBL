@@ -29,12 +29,22 @@ public abstract class Room implements Paintable {
     Room westRoom;
     Room southRoom;
 
+    /**
+     * Constructor for the room class. 
+     * 
+     * @param nr The number of the room. The variable is used in stage generation.
+     */
     Room(int nr) {
 
         this.roomNumber = nr;
         tileSet = new Tile[ROOM_SIZE][ROOM_SIZE];
         northBranchVisit = eastBranchVisit = southBranchVisit = westBranchVisit = false;
 
+        for (int i = 0; i < ROOM_SIZE; i++) {
+            for (int j = 0; j < ROOM_SIZE; j++) {
+                tileSet[i][j] = new Tile();
+            }
+        }
 
     }
 
@@ -46,9 +56,9 @@ public abstract class Room implements Paintable {
      * Method that returns the actor at a given location. 
      * The "in front of" is determined by the passed arguments.
      * 
-     * @param posX
-     * @param posY
-     * @return
+     * @param posX Index X or row of the tile to check.
+     * @param posY Index Y or column of the tile to check.
+     * @return an Actor if the checked tile has one, Null if there is none.
      */
     public Actor getInFrontOf(int posX, int posY) {
  
@@ -69,10 +79,23 @@ public abstract class Room implements Paintable {
         return ROOM_SIZE;
     }
 
-
-
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Children Classes of the Room Class.
 
 class StartRoom extends Room {
 

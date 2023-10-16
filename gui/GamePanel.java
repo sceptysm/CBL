@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 import actors.Player;
+import environment.Stage;
 
 
 /**
@@ -35,7 +36,9 @@ public class GamePanel extends JPanel implements ActionListener {
     //Input Handlers
     KeyboardHandler keyHandler = new KeyboardHandler();
     MouseHandler mouseHandler = new MouseHandler();
-    GameLoop gameLoop = new GameLoop(keyHandler, mouseHandler);
+    GameLoop gameLoop;
+    Player player = new Player();
+    Stage stage;
 
     //Visual
 
@@ -51,13 +54,28 @@ public class GamePanel extends JPanel implements ActionListener {
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
 
+        stage = new Stage(3);
+        stage.generateStage(stage.getStartRoom());
+        gameLoop = new GameLoop(keyHandler, mouseHandler, player, stage);
+        
+        System.out.println(actualtileSize);
+        System.out.println(screenHeight);
+        System.out.println(screenWidth);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenWidth, screenHeight);
+        g.setColor(Color.WHITE);
+        g.fillRect(player.getRenderPositionX(),
+            player.getRenderPositionY(), actualtileSize, actualtileSize);
+
         
         gameLoop.update();
+        
+        repaint();
 
     }
 

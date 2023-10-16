@@ -29,9 +29,6 @@ public class Main {
         frame.setVisible(true);
 
 
-        Player player = new Player();
-
-
     }
 
 }

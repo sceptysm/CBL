@@ -1,13 +1,15 @@
-package Actors;
+package actors;
 
 import java.util.Vector;
 
-class Player extends Actor {
+public class Player extends Actor {
 
 
-    Player() {
-        positionX = 0;
-        positionY = 0;
+    public Player(String t) {
+        super(t);
+        positionX = 1;
+        positionY = 3;
+        updateRenderPosition();
 
         
 

@@ -1,6 +1,6 @@
-package Items;
+package items;
 
-import Actors.Actor;
+import actors.Actor;
 
 public abstract class Item {
 

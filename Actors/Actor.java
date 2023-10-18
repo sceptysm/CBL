@@ -1,5 +1,7 @@
 package actors;
 
+import environment.Room;
+import java.util.Random;
 import java.util.Vector;
 import items.Item;
 
@@ -7,15 +9,23 @@ import items.Item;
  *  Parent object for PC and NPCs.
  */
 public class Actor {
-    int positionX;
-    int positionY;
+
+    //fields used for game generation.
+    int positionX; //Index in the Tile Array
+    int positionY; //Index in the Tile Array
+
+    int tileSize = 48;
+    int renderPositionX;
+    int renderPositionY;
+
+    Random random = new Random();
+    public Room currentRoom;
 
     //in game stats
-    int healthPoints;
-    int strength;
-    int defense;
-    int agility;
-    
+    public int healthPoints;
+    public int strength;
+    public int defense;
+    public int agility;
     public int coins;
 
     //character type
@@ -26,7 +36,7 @@ public class Actor {
     public Vector<Item> inventory;
 
 
-    //initialize a representation for the actor.
+    //initialize a representation for the actor (such as a sprite).
 
     // Movement methods for each Actor. 
 
@@ -63,8 +73,32 @@ public class Actor {
         }
 
     }
-    void moveLeft() {
-        positionX -= 1;
+
+    public void moveDown() {
+
+        //Checks what is in front of the actor
+
+        //condition for Index out of bounds
+        boolean onGrid = (positionY + 1) < currentRoom.getRoomSize(); 
+        Actor inFrontOf;
+
+        if (!onGrid) { //If in front of is not a tile in the grid :
+            return;
+        }
+         
+        // Else : 
+        inFrontOf = currentRoom.getInFrontOf(positionX, positionY + 1);
+        if (inFrontOf == null) { // if tile in front of is not occupied 
+            deleteFromCurrentTile();
+            currentRoom.tileSet[positionX][positionY + 1].occupant = this;
+            positionY += 1;
+            updateRenderPosition();
+
+        } else {
+
+            interact(inFrontOf);
+        }
+
     }
 
     public void moveLeft() {

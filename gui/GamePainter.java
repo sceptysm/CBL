@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import environment.Tile;
 import environment.Room;
+import environment.Wall;
 
 public class GamePainter {
 
@@ -31,6 +32,10 @@ public class GamePainter {
         System.out.println("Size: " + roomSize);
     }
 
+    void paintGame() {
+        paintRoom();
+        paintUI();
+    }
     /**
      * A method that paints the room in which the player is positioned.'
      * Relies on the currentRoom variable as the room which is now "displayed".
@@ -59,7 +64,12 @@ public class GamePainter {
         Tile tile = currentTileSet[row][column];
 
         // Paint the tile
-        
+        g.setColor(Color.BLACK);
+
+        if (tile instanceof Wall) {
+            g.setColor(Color.GREEN);
+        }
+
         if (tile.hasActor()) {
 
             // Paint the actor, by fetching the actor at the current tile.
@@ -93,11 +103,39 @@ public class GamePainter {
                 }
                 break;
 
+            case "door":
+                if (actor.healthPoints >= 0) {
+                    g.setColor(Color.YELLOW);
+                    g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
+                         tileSize, tileSize);
+                }
+                break;
+
+            case "obelisk":
+                if (actor.healthPoints >= 0) {
+                    g.setColor(Color.BLUE);
+                    g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
+                         tileSize, tileSize);
+                }
+                break;
+
+            case "treasure":
+                if (actor.healthPoints >= 0) {
+                    g.setColor(Color.GRAY);
+                    g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
+                         tileSize, tileSize);
+                }
+                break;
+
             default:
                 break;
 
         }
         
+
+    }
+
+    void paintUI() {
 
     }
 

@@ -16,13 +16,13 @@ public class Treasure extends Actor {
     /**
      * Constructor for the Treasure child class.
      */
-    public Treasure(String t) {
+    public Treasure() {
 
         /* Acts as a healthless sprite right from the get-go.
         *  Hence moving into this actor results in interacting with the Treasure actor
         *  instead of having the need to "kill" it first.
         */
-        super(t);
+        super("treasure");
         
         healthPoints = 0;
         coins = random.nextInt(0, 50);

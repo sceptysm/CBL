@@ -42,11 +42,8 @@ public class Actor {
 
     //Constructor for actor not yet used
     public Actor(String t) {
-
         type = t;
         updateRenderPosition();
-
-
     }
 
     public void moveUp() {

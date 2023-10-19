@@ -38,30 +38,25 @@ public class Stage {
 
         stageNumber = 1; // number of the stage
 
-        
-        
-
         // ALGORITHM VARIABLES
         roomCapacity = 2 + stageNumber; // total amount of rooms in the stage
         currentNumberOfRooms = 1; // variable used for generateStage() algorithm
         this.hasEnd = false; // hasEnd check used in algorithm
 
+        player = new Player("player");
         // initalize the stage with just a startroom
-        this.startRoom = new StartRoom(currentNumberOfRooms);
+        //this.startRoom = new StartRoom(currentNumberOfRooms, player);
+        this.startRoom = new StartRoom(currentNumberOfRooms, new Player("player"));
         // initialize Random
         this.random = new Random();
 
         // initialize player in the start room. 
-        player = new Player("player");
-        player.currentRoom = startRoom;
-        testMonster = startRoom.tileSet[5][6].occupant;
-        testMonster.currentRoom = startRoom;
-        startRoom.tileSet[player.getPositionX()][player.getPositionY()].occupant = player;
+        //player.currentRoom = startRoom;
+        //startRoom.tileSet[player.getPositionX()][player.getPositionY()].occupant = player;
 
-        
         // initialize the test vector, used for testing the algorithm
-        this.test = new Vector<>();
-        generateStage(startRoom);
+        this.test = new Vector<Room>();
+        //generateStage(startRoom);
     }
 
     /**
@@ -72,6 +67,7 @@ public class Stage {
      * @param stageNr the number of the stage
      * @param p the player actor object
      */
+    
     public Stage(int stageNr, Player p) {
 
         stageNumber = stageNr; // number of the stage
@@ -82,42 +78,43 @@ public class Stage {
         currentNumberOfRooms = 1; // variable used for generateStage() algorithm
         this.hasEnd = false; // hasEnd check used in algorithm
 
+        player = p;
+
         // initalize the stage with just a startroom
-        this.startRoom = new StartRoom(currentNumberOfRooms);
+        this.startRoom = new StartRoom(currentNumberOfRooms, p);
         // initialize Random
         this.random = new Random();
 
         // initialize player in the start room. 
-        player = p;
         player.currentRoom = startRoom;
-        startRoom.tileSet[player.getPositionX()][player.getPositionY()].occupant = player;
-
-
+        //startRoom.tileSet[player.getPositionX()][player.getPositionY()].occupant = player;
 
         // initialize the test vector, used for testing the algorithm
-        this.test = new Vector<>();
-        generateStage(startRoom);
-
-
+        this.test = new Vector<Room>();
+        
+        //generateStage(startRoom);
     }
+    
+    // STAGE GENERATION METHODS:
 
-
-
-
-
-
-
-    // Stage generation methods : 
-
-    // method to print out all elements of the test vector
+    /**
+     * A method that prints out the test.
+     */
     public void printTest() {
+        System.out.println("printtest ran");
+        System.out.println(test.elementAt(0));
+        System.out.println(test.elements());
         for (int i = 0; i < test.size(); i++) {
-            System.out.println(test.elementAt(i).getType() + test.elementAt(i).getRoomNumber());
+            System.out.println("test has elements");
+            System.out.println(test.elementAt(i).getType() + ". " + test.elementAt(i).getRoomNumber());
+            test.elementAt(i).printRoom();
         }
     }
 
     // stage generation algorithm that generates a 4-way linked list of rooms
     public void generateStage (Room currentRoom) {
+        
+        System.out.println("generate stage ran");
         currentNumberOfRooms++;
         test.add(currentRoom);
 
@@ -141,30 +138,49 @@ public class Stage {
             genWest = false;
         }
 
-        // if algorithm is at the end, generate a single end room
+        System.out.println("after came");
+
         if (currentNumberOfRooms > roomCapacity - 1) {
             Room end = new EndRoom(currentNumberOfRooms);
 
             if (currentRoom.northRoom != null && !hasEnd) {
+                // establish a 2 way connection
                 currentRoom.southRoom = end;
+                currentRoom.southRoom.northRoom = currentRoom;
+
+                // generate the room
+                end.generateRoom(stageNumber);
+
+                // do things necessary for algorithm
                 currentNumberOfRooms++;
                 test.add(currentRoom.southRoom);
+
+                // make sure there is only one end room per stage
                 hasEnd = true;
             }
             if (currentRoom.eastRoom != null && !hasEnd) {
                 currentRoom.westRoom = end;
+                currentRoom.westRoom.eastRoom = currentRoom;
+                end.generateRoom(stageNumber);
+
                 currentNumberOfRooms++;
                 test.add(currentRoom.westRoom);
                 hasEnd = true;
             }
             if (currentRoom.southRoom != null && !hasEnd) {
                 currentRoom.northRoom = end;
+                currentRoom.northRoom.southRoom = currentRoom;
+                end.generateRoom(stageNumber);
+
                 currentNumberOfRooms++;
                 test.add(currentRoom.northRoom);
                 hasEnd = true;
             }
             if (currentRoom.westRoom != null && !hasEnd) {
                 currentRoom.eastRoom = end;
+                currentRoom.eastRoom.westRoom = currentRoom;
+                end.generateRoom(stageNumber);
+
                 currentNumberOfRooms++;
                 test.add(currentRoom.eastRoom);
                 hasEnd = true;
@@ -233,9 +249,13 @@ public class Stage {
             currentNumberOfRooms--;
             generateStage(currentRoom);
         }
+
+        //currentRoom.generateRoom(stageNumber);
+        System.out.println("here: " + currentRoom);
     }
 
-    public void traverseStage (Room currentRoom){
+    public void traverseStage (Room currentRoom) {
+
         System.out.println("NUMBER: " + currentRoom.getRoomNumber());
         System.out.println("TYPE: " + currentRoom.getType());
         String neighbors = "";

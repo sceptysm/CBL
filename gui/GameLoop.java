@@ -40,10 +40,8 @@ public class GameLoop {
     private static void init() {
         stage = new Stage();
         player = stage.player;
-        testMonster = stage.testMonster;
         currentStage = 1;
         currentRoom = stage.startRoom;
-        
         
     }
 

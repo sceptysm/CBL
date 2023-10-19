@@ -39,9 +39,13 @@ public class GameLoop {
 
     private static void init() {
         stage = new Stage();
-        player = stage.player;
         currentStage = 1;
         currentRoom = stage.startRoom;
+        stage.generateStage(currentRoom);
+        player = stage.player;
+        stage.printTest();
+        System.out.println(currentRoom);
+
         
     }
 

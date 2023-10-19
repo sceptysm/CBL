@@ -11,7 +11,6 @@ public class Main {
 
     public static void main(String[] args) {
         
-        /*
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -24,12 +23,6 @@ public class Main {
  
         frame.setLocationRelativeTo(null); //Displayed at center of the screen
         frame.setVisible(true);
-        */
 
-        Stage s = new Stage();
-        //s.printTest();
-        s.generateStage(s.startRoom);
-        s.printTest();
-        s.traverseStage(s.startRoom);
     }
 }

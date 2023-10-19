@@ -4,7 +4,10 @@ package actors;
  *
  */
 public class Obelisk extends Actor {
-    public Obelisk() {
-        super("obelisk");
+
+    public Obelisk(int posX, int posY) {
+        super("obelisk", posX, posY);
+        
     }
+    
 }

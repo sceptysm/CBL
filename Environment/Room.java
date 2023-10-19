@@ -57,7 +57,7 @@ public abstract class Room implements Paintable {
         northBranchVisit = eastBranchVisit = southBranchVisit = westBranchVisit = false;
         random = new Random();
 
-        generateRoom(nr);
+        //generateRoom(nr);
         
     }
 
@@ -85,24 +85,24 @@ public abstract class Room implements Paintable {
     */
     public void generateRoom(int stageNumber) {
 
-        System.out.println("generate room ran");
+        //System.out.println("generate room ran");
 
         fillWithEmptyTiles();
         fillWithWalls();
 
         // math => number of enemies/treasure in the room
-        int numberOfEnemies = (int) Math.floor((1 + stageNumber) * enemySpawnModifier);
-        int numberOfTreasure = (int) Math.floor((1 + stageNumber) * treasureSpawnModifier);
+        int numberOfEnemies = (int) Math.floor((stageNumber) * enemySpawnModifier);
+        int numberOfTreasure = (int) Math.floor((stageNumber) * treasureSpawnModifier);
         // etc.
 
         // generate enemies and treasure
+
         generateEnemies(numberOfEnemies);
         generateTreasure(numberOfTreasure);
 
         applySpecial();
         generateDoors();
         System.out.println("generate room end");
-        System.out.println(this);
     }
 
     public void fillWithEmptyTiles() {
@@ -134,28 +134,25 @@ public abstract class Room implements Paintable {
      * Method to print a room layout in the terminal.
      */
     public void printRoom() {
-        System.out.println("Are we here? ");
         for (int i = 0; i < ROOM_SIZE; i++) {
             for (int j = 0; j < ROOM_SIZE; j++) {
-                System.out.println("print room");
-                if (tileSet[i][j] instanceof Wall) {
+                if (tileSet[i][j].getActor() != null) {
+                    switch (tileSet[i][j].getActor().getType()) {
+                        case "door" -> System.out.print(" D ");
+                        case "player" -> System.out.print(" @ ");
+                        case "monster" -> System.out.print(" X ");
+                        case "treasure" -> System.out.print(" T ");
+                        case "obelisk" -> System.out.print("[^]");
+                    }
+                } else if (tileSet[i][j] instanceof Wall) {
                     System.out.print("[/]");
-                } else if (tileSet[i][j].getActor() instanceof Door) {
-                    System.out.print("   ");
-                } else if (tileSet[i][j].getActor() instanceof Player) {
-                    System.out.print(" @ ");
-                } else if (tileSet[i][j].getActor() instanceof Monster) {
-                    System.out.print(" X ");
-                } else if (tileSet[i][j].getActor() instanceof Treasure) {
-                    System.out.print(" T ");
-                } else if (tileSet[i][j].getActor() instanceof Obelisk) {
-                    System.out.print("[^]");
-                } else if (tileSet[i][j].getActor() == null) {
+                } else {
                     System.out.print("   ");
                 }
             }
-            System.out.println("");
+            System.out.println();
         }
+            System.out.println("");
     }
 
     /**
@@ -163,7 +160,7 @@ public abstract class Room implements Paintable {
      */
     public void applySpecial() {
         // apply the special tile to the center of the room
-       // tileSet[4][4] = special;
+        tileSet[4][4] = special;
     }
 
 
@@ -188,29 +185,29 @@ public abstract class Room implements Paintable {
 
     public void generateEnemies(int numberOfEnemies) {
         for (int i = 0; i < numberOfEnemies; i++) {
-            int j = random.nextInt(1, 9);
-            int k = random.nextInt(1, 9);
+            int j = random.nextInt(1, 7);
+            int k = random.nextInt(1, 7);
 
-            if (tileSet[j][k] != null) {
+            if (tileSet[j][k].getActor() != null) {
                 i--;
             } else {
-                tileSet[j][k].setActor(new Monster("monster"));;
+                tileSet[j][k].setActor(new Monster("monster", j, k));;
             }
         }
     }
 
     public void generateTreasure(int numberOfTreasure) {
         for (int i = 0; i < numberOfTreasure; i++) {
-            int j = random.nextInt(1, 9);
-            int k = random.nextInt(1, 9);
+            int j = random.nextInt(1, 7);
+            int k = random.nextInt(1, 7);
 
             // check if there is something already on the
-            // coordinates or they are the center coordinates
-            if (tileSet[j][k] != null || (k == 5 && j == 5)) {
+            // coordinates, or they are the center coordinates
+            if (tileSet[j][k].getActor() != null || (k == 5 && j == 5)) {
                 // if yes, do nothing but do not count this toward the loop
                 i--;
             } else {
-                tileSet[j][k].setActor(new Treasure());;
+                tileSet[j][k].setActor(new Treasure(5, 5));;
             }
         }
     }
@@ -318,8 +315,8 @@ class StartRoom extends Room {
         super(nr);
         special = new Tile();
         special.occupant = p;
+        special.occupant.currentRoom = this;
 
-        //tileSet[special.getActor().getPositionX()][special.getActor().getPositionY()].occupant = p;
     }
 
     @Override
@@ -335,6 +332,7 @@ class DungeonRoom extends Room {
 
         enemySpawnModifier = 1.0;
         treasureSpawnModifier = 1.0;
+        special = new Tile();
 
     }
 
@@ -349,7 +347,8 @@ class TreasureRoom extends Room {
     TreasureRoom(int nr) {
         super(nr);
         special = new Tile();
-        special.occupant = new Treasure();
+        special.occupant = new Treasure(4, 4);
+        special.occupant.currentRoom = this;
 
         enemySpawnModifier = 0.0;
         treasureSpawnModifier = 1.0;
@@ -366,7 +365,8 @@ class EndRoom extends Room {
     EndRoom(int nr) {
         super(nr);
         special = new Tile();
-        special.occupant = new Obelisk();
+        special.occupant = new Obelisk(4, 4);
+        special.occupant.currentRoom = this;
 
     }
 

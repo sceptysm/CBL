@@ -7,11 +7,9 @@ import items.Item;
 public class Player extends Actor {
 
 
-    public Player(String t) {
-        super(t);
-        positionX = 1;
-        positionY = 3;
-        updateRenderPosition();
+    public Player(String t, int posX, int posY) {
+        super(t, posX, posY);
+        
 
         healthPoints = 20;
         strength = 1;

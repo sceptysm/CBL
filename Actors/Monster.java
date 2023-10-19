@@ -5,13 +5,11 @@ public class Monster extends Actor {
     int level;
     int experiencePointWorth;
 
-    public Monster(String t) {
+    public Monster(String t, int posX, int posY) {
 
-        super(t);
+        super(t, posX, posY);
         //arbitrary position
-        positionX = 5;
-        positionY = 6;
-        updateRenderPosition();
+       
 
         //stats initialization
         healthPoints = 5;

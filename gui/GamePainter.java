@@ -67,8 +67,10 @@ public class GamePainter {
         g.setColor(Color.BLACK);
 
         if (tile instanceof Wall) {
-            g.setColor(Color.GREEN);
+            g.setColor(Color.GRAY);
+            g.fillRect(tile.getRenderPositionX(), tile.getRenderPositionY(),tileSize, tileSize);
         }
+
 
         if (tile.hasActor()) {
 
@@ -85,51 +87,43 @@ public class GamePainter {
      */
     void paintActor(Actor actor) {
 
-                
-        switch (actor.getType()) {
 
-            case "player":
+        switch (actor.getType()) {
+            case "player" -> {
                 g.setColor(Color.WHITE);
                 g.fillRect(actor.getRenderPositionX(),
-                    actor.getRenderPositionY(), tileSize, tileSize);
-    
-                break;
-                
-            case "monster":
+                        actor.getRenderPositionY(), tileSize, tileSize);
+            }
+            case "monster" -> {
                 if (actor.healthPoints >= 0) {
                     g.setColor(Color.RED);
                     g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
-                         tileSize, tileSize);
+                            tileSize, tileSize);
                 }
-                break;
-
-            case "door":
+            }
+            case "door" -> {
                 if (actor.healthPoints >= 0) {
-                    g.setColor(Color.YELLOW);
+                    g.setColor(Color.ORANGE);
                     g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
-                         tileSize, tileSize);
+                            tileSize, tileSize);
                 }
-                break;
-
-            case "obelisk":
+            }
+            case "obelisk" -> {
                 if (actor.healthPoints >= 0) {
                     g.setColor(Color.BLUE);
                     g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
-                         tileSize, tileSize);
+                            tileSize, tileSize);
                 }
-                break;
-
-            case "treasure":
+            }
+            case "treasure" -> {
                 if (actor.healthPoints >= 0) {
-                    g.setColor(Color.GRAY);
+                    g.setColor(Color.YELLOW);
                     g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
-                         tileSize, tileSize);
+                            tileSize, tileSize);
                 }
-                break;
-
-            default:
-                break;
-
+            }
+            default -> {
+            }
         }
         
 

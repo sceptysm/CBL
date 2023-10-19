@@ -43,10 +43,10 @@ public class Stage {
         currentNumberOfRooms = 1; // variable used for generateStage() algorithm
         this.hasEnd = false; // hasEnd check used in algorithm
 
-        player = new Player("player");
+        player = new Player("player", 4, 4);
         // initalize the stage with just a startroom
         //this.startRoom = new StartRoom(currentNumberOfRooms, player);
-        this.startRoom = new StartRoom(currentNumberOfRooms, new Player("player"));
+        this.startRoom = new StartRoom(currentNumberOfRooms, player);
         // initialize Random
         this.random = new Random();
 
@@ -113,8 +113,6 @@ public class Stage {
 
     // stage generation algorithm that generates a 4-way linked list of rooms
     public void generateStage (Room currentRoom) {
-        
-        System.out.println("generate stage ran");
         currentNumberOfRooms++;
         test.add(currentRoom);
 
@@ -137,8 +135,6 @@ public class Stage {
         if (currentRoom.westRoom != null) {
             genWest = false;
         }
-
-        System.out.println("after came");
 
         if (currentNumberOfRooms > roomCapacity - 1) {
             Room end = new EndRoom(currentNumberOfRooms);
@@ -250,8 +246,7 @@ public class Stage {
             generateStage(currentRoom);
         }
 
-        //currentRoom.generateRoom(stageNumber);
-        System.out.println("here: " + currentRoom);
+        currentRoom.generateRoom(stageNumber);
     }
 
     public void traverseStage (Room currentRoom) {

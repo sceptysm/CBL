@@ -7,6 +7,8 @@ public class Tile {
     
     private int positionX;
     private int positionY;
+    private int renderPositionX;
+    private int renderPositionY;
     public boolean walkable;
     public Actor occupant;  //Actor at tile.
     
@@ -23,6 +25,13 @@ public class Tile {
         positionX = posX;
         positionY = posY;
         walkable = true;
+        updateRenderPosition();
+    }
+
+    void updateRenderPosition() {
+        int tileSize = 48;
+        renderPositionX = positionX * tileSize;
+        renderPositionY = positionY * tileSize;
     }
 
     /**
@@ -47,5 +56,13 @@ public class Tile {
 
     public void setActor(Actor a) {
         occupant = a;
+    }
+
+    public int getRenderPositionX() {
+        return renderPositionX + 192;
+    }
+
+    public int getRenderPositionY() {
+        return renderPositionY + 96;
     }
 }

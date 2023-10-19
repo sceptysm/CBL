@@ -43,6 +43,14 @@ public class Actor {
     //Constructor for actor not yet used
     public Actor(String t) {
         type = t;
+        //updateRenderPosition();
+    }
+
+    public Actor(String t, int posX, int posY) {
+        type = t;
+        positionX = posX;
+        positionY = posY;
+
         updateRenderPosition();
     }
 
@@ -154,14 +162,13 @@ public class Actor {
     /**
      * Method that initializes actor interaction from which further 
      * in-game interactions are called based on the interaction required 
-     * in regards to the type/state of actor with which the this actor interacts.
+     * in regard to the type/state of actor with which this actor interacts.
      * 
-     * @param i the actor with which this actor interacts
+     * @param interactee the actor with which this actor interacts
      */
-    void interact(Actor i) {
-        Actor interactee = i; 
+    void interact(Actor interactee) {
 
-        if (interactee.healthPoints <= 0) { //If the HP 
+        if (interactee.healthPoints <= 0) { //If the HP
             //loot the dead body: 
             System.out.println("Looting");
             coins = interactee.giveCoins();
@@ -206,8 +213,8 @@ public class Actor {
      * Method that updates the position where an Actor is rendered on the JPanel.
      */
     void updateRenderPosition() {
-        renderPositionX = positionX * tileSize;
-        renderPositionY = positionY * tileSize;
+        renderPositionX = (positionX) * tileSize;
+        renderPositionY = (positionY) * tileSize;
     }
 
     /**

@@ -11,7 +11,7 @@ import environment.Wall;
 public class GamePainter {
 
     private Graphics g;
-    private Room currentRoom;
+    private static Room currentRoom;
     private int roomSize;
     private int tileSize;
     private Tile[][] currentTileSet;
@@ -68,7 +68,7 @@ public class GamePainter {
 
         if (tile instanceof Wall) {
             g.setColor(Color.GRAY);
-            g.fillRect(tile.getRenderPositionX(), tile.getRenderPositionY(),tileSize, tileSize);
+            g.fillRect(tile.getRenderPositionX(), tile.getRenderPositionY(), tileSize, tileSize);
         }
 
 
@@ -136,7 +136,7 @@ public class GamePainter {
 
     // Utility Get and Set Methods :
 
-    public void setCurrentRoom(Room r) {
+    public static void setCurrentRoom(Room r) {
         currentRoom = r;
 
     }

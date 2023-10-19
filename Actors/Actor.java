@@ -4,6 +4,7 @@ import environment.Room;
 import java.util.Random;
 import java.util.Vector;
 import items.Item;
+import gui.GamePainter;
 
 /**
  *  Parent object for PC and NPCs.
@@ -41,15 +42,18 @@ public class Actor {
     // Movement methods for each Actor. 
 
     //Constructor for actor not yet used
+    /*
     public Actor(String t) {
         type = t;
         //updateRenderPosition();
     }
+    */
 
     public Actor(String t, int posX, int posY) {
         type = t;
         positionX = posX;
         positionY = posY;
+        healthPoints = 0;
 
         updateRenderPosition();
     }
@@ -169,17 +173,34 @@ public class Actor {
     void interact(Actor interactee) {
 
         if (interactee.healthPoints <= 0) { //If the HP
-            //loot the dead body: 
-            System.out.println("Looting");
-            coins = interactee.giveCoins();
-            System.out.println("I now have: " + coins + " coins");
-            interactee.healthPoints = -1; // test
-            interactee.deleteFromCurrentTile();
+            //loot the dead body:
+            doSpecialInteraction(interactee);
             
         } else {
             System.out.println("Here");
             attack(interactee);
         }
+    }
+
+    void doSpecialInteraction(Actor interactee) {
+        if (getType() == "player") {
+            switch (interactee.getType()) {
+                case "door" -> {
+                    currentRoom = ((Door) interactee).nextRoom;
+                    updatePositionInNewRoom(interactee);
+                }
+                case "monster" -> {
+                    System.out.println("Looting");
+                    coins = interactee.giveCoins();
+                    System.out.println("I now have: " + coins + " coins");
+                    interactee.healthPoints = -1; // test
+                    interactee.deleteFromCurrentTile();
+                }
+                default -> {
+                }
+            }
+        }
+        
     }
 
     /**
@@ -217,6 +238,41 @@ public class Actor {
         renderPositionY = (positionY) * tileSize;
     }
 
+    void updatePositionInNewRoom(Actor d) {
+
+        //Based on door location update player location
+
+        Door door = (Door) d;
+
+        switch (door.direction) {
+
+            case "north" -> {
+                positionX = 4;
+                positionY = 7;
+                System.out.println("north");
+            }
+            case "east" -> {
+                positionX = 1;
+                positionY = 4;
+            }
+            case "south" -> {
+                positionX = 4;
+                positionY = 1;
+            }
+            case "west" -> {
+                positionX = 7;
+                positionY = 4;
+            }
+            default -> {
+            }
+        }
+
+        currentRoom.tileSet[positionX][positionY].setActor(this, currentRoom);
+        updateRenderPosition();
+        GamePainter.setCurrentRoom(currentRoom);
+
+    }
+
     /**
      * Method that nulls the occupant at the index position of this actor
      * in the current room.
@@ -246,5 +302,9 @@ public class Actor {
 
     public String getType() {
         return type;
+    }
+
+    public void setCurrentRoom(Room r) {
+        currentRoom = r;
     }
 }

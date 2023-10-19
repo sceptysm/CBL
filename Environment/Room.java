@@ -143,6 +143,8 @@ public abstract class Room implements Paintable {
                         case "monster" -> System.out.print(" X ");
                         case "treasure" -> System.out.print(" T ");
                         case "obelisk" -> System.out.print("[^]");
+                        default -> {   
+                        }
                     }
                 } else if (tileSet[i][j] instanceof Wall) {
                     System.out.print("[/]");
@@ -170,16 +172,16 @@ public abstract class Room implements Paintable {
     public void generateDoors() {
         // method will be modified once door functionality is finished
         if (hasNorthRoom()) {
-            tileSet[0][4].setActor(new Door(0, 4));
+            tileSet[4][0].setActor(new Door(4, 0, northRoom, "north"), this);
         }
         if (hasEastRoom()) {
-            tileSet[4][8].setActor(new Door(4, 8));
+            tileSet[8][4].setActor(new Door(8, 4, eastRoom, "east"), this);
         }
         if (hasSouthRoom()) {
-            tileSet[8][4].setActor(new Door(8, 4));
+            tileSet[4][8].setActor(new Door(4, 8, southRoom, "south"), this);
         }
         if (hasWestRoom()) {
-            tileSet[4][0].setActor(new Door(4, 0));
+            tileSet[0][4].setActor(new Door(0, 4, westRoom, "west"), this);
         }
     }
 
@@ -191,7 +193,7 @@ public abstract class Room implements Paintable {
             if (tileSet[j][k].getActor() != null) {
                 i--;
             } else {
-                tileSet[j][k].setActor(new Monster("monster", j, k));;
+                tileSet[j][k].setActor(new Monster("monster", j, k), this);;
             }
         }
     }
@@ -207,7 +209,7 @@ public abstract class Room implements Paintable {
                 // if yes, do nothing but do not count this toward the loop
                 i--;
             } else {
-                tileSet[j][k].setActor(new Treasure(5, 5));;
+                tileSet[j][k].setActor(new Treasure(5, 5), this);;
             }
         }
     }

@@ -54,8 +54,9 @@ public class Tile {
         return occupant;
     }
 
-    public void setActor(Actor a) {
+    public void setActor(Actor a, Room r) {
         occupant = a;
+        occupant.setCurrentRoom(r);
     }
 
     public int getRenderPositionX() {

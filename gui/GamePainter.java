@@ -1,8 +1,10 @@
 package gui;
 
 import actors.Actor;
+import actors.Player;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import environment.Tile;
 import environment.Room;
@@ -10,11 +12,14 @@ import environment.Wall;
 
 public class GamePainter {
 
-    private Graphics g;
+    private static Graphics g;
     private static Room currentRoom;
     private int roomSize;
-    private int tileSize;
+    private static int tileSize;
     private Tile[][] currentTileSet;
+    //private int screenWidth;
+    //private int screenHeight;
+    private Actor player;
 
     /**
      * A constructor for the GamePainter class.
@@ -23,11 +28,14 @@ public class GamePainter {
      * @param s the screenWidth 
 
      */
-    GamePainter(Room r, int s) {
+    GamePainter(Room r) {
         // Initialize the variables to render
-        tileSize = s;
+        tileSize = GamePanel.REAL_TILE_SIZE;
         currentRoom = r;
         roomSize = Room.getRoomSize();
+
+        //screenHeight = GamePanel.SCREEN_HEIGHT;
+        //screenWidth = GamePanel.SCREEN_WIDTH;
 
         System.out.println("Size: " + roomSize);
     }
@@ -36,6 +44,7 @@ public class GamePainter {
         paintRoom();
         paintUI();
     }
+    
     /**
      * A method that paints the room in which the player is positioned.'
      * Relies on the currentRoom variable as the room which is now "displayed".
@@ -49,7 +58,6 @@ public class GamePainter {
                 paintTile(i, j);
             } 
         }
-
 
     }
 
@@ -69,9 +77,8 @@ public class GamePainter {
         if (tile instanceof Wall) {
             g.setColor(Color.GRAY);
             g.fillRect(tile.getRenderPositionX(), tile.getRenderPositionY(), tileSize, tileSize);
-        }
-
-
+        } 
+        
         if (tile.hasActor()) {
 
             // Paint the actor, by fetching the actor at the current tile.
@@ -87,9 +94,9 @@ public class GamePainter {
      */
     void paintActor(Actor actor) {
 
-
         switch (actor.getType()) {
             case "player" -> {
+                player = actor;
                 g.setColor(Color.WHITE);
                 g.fillRect(actor.getRenderPositionX(),
                         actor.getRenderPositionY(), tileSize, tileSize);
@@ -129,8 +136,38 @@ public class GamePainter {
 
     }
 
-    void paintUI() {
+    /**
+     * A method that paints the Game UI.
+     */
+    public void paintUI() {
 
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Dialog", Font.PLAIN, 25));
+
+
+        // Draw Game Information
+        g.drawString("STAGE: " + Integer.toString(GameLoop.getStageNumber()),
+            tileSize * 2, tileSize * 1);
+        g.drawString("SCORE: " + Integer.toString(((Player) player).getScore()),
+            tileSize * 12, tileSize * 1);
+
+        // Draw Player Stats
+        g.drawString("HP: " + Integer.toString(player.healthPoints), tileSize * 2, tileSize * 16);
+        g.drawString("COINS: ", tileSize * 13, tileSize * 16);
+    }
+
+    /**
+     * A method that paints a message explaining a Player's interaction
+     * with the game logic.
+     * 
+     * @param s
+     */
+    public static void paintMessage(String s) {
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Dialog", Font.PLAIN, 30));
+        g.drawString(s, tileSize * 3, tileSize * 12);
+        
     }
 
 
@@ -138,12 +175,10 @@ public class GamePainter {
 
     public static void setCurrentRoom(Room r) {
         currentRoom = r;
-
     }
 
     public void setGraphics(Graphics graphics) {
-        this.g = graphics;
+        g = graphics;
     }
-
     
 }

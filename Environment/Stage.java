@@ -2,6 +2,8 @@ package environment;
 
 import actors.Actor;
 import actors.Player;
+import gui.GamePainter;
+
 import java.util.Random;
 import java.util.Vector;
 
@@ -84,9 +86,11 @@ public class Stage {
         this.startRoom = new StartRoom(currentNumberOfRooms, p);
         // initialize Random
         this.random = new Random();
+        GamePainter.setCurrentRoom(startRoom);
+
 
         // initialize player in the start room. 
-        player.currentRoom = startRoom;
+        //player.currentRoom = startRoom;
         //startRoom.tileSet[player.getPositionX()][player.getPositionY()].occupant = player;
 
         // initialize the test vector, used for testing the algorithm
@@ -106,7 +110,8 @@ public class Stage {
         System.out.println(test.elements());
         for (int i = 0; i < test.size(); i++) {
             System.out.println("test has elements");
-            System.out.println(test.elementAt(i).getType() + ". " + test.elementAt(i).getRoomNumber());
+            System.out.println(test.elementAt(i).getType()
+                + " " + test.elementAt(i).getRoomNumber());
             test.elementAt(i).printRoom();
         }
     }

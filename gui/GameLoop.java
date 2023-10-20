@@ -26,7 +26,7 @@ public class GameLoop {
     //Variables inside the Stage
 
     private static Monster[] monsters;
-    private static int currentStage; 
+    static int stageNumber; 
     
 
     GameLoop() {
@@ -37,9 +37,19 @@ public class GameLoop {
         init();
     }
 
+    public static void newStage() {
+        stageNumber += 1;
+        stage = new Stage(stageNumber, player);
+        currentRoom = stage.startRoom;
+        stage.generateStage(currentRoom);
+        stage.printTest();
+        System.out.println(currentRoom);
+
+    }
+
     private static void init() {
         stage = new Stage();
-        currentStage = 1;
+        stageNumber = 1;
         currentRoom = stage.startRoom;
         stage.generateStage(currentRoom);
         player = stage.player;
@@ -70,5 +80,13 @@ public class GameLoop {
             player.moveRight();
         }
         
+    }
+
+    public static int getStageNumber() {
+        return stageNumber;
+    }
+
+    public static void increaseStageNumber() {
+        stageNumber += 1;
     }
 }

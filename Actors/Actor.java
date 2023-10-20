@@ -4,7 +4,9 @@ import environment.Room;
 import java.util.Random;
 import java.util.Vector;
 import items.Item;
+import gui.GameLoop;
 import gui.GamePainter;
+import gui.GamePanel;
 
 /**
  *  Parent object for PC and NPCs.
@@ -15,7 +17,7 @@ public class Actor {
     int positionX; //Index in the Tile Array
     int positionY; //Index in the Tile Array
 
-    int tileSize = 48;
+    int tileSize = GamePanel.REAL_TILE_SIZE;
     int renderPositionX;
     int renderPositionY;
 
@@ -72,17 +74,28 @@ public class Actor {
         inFrontOf = currentRoom.getInFrontOf(positionX, positionY - 1);
         if (inFrontOf == null) { // if tile in front of is not occupied 
             deleteFromCurrentTile();
-            currentRoom.tileSet[positionX][positionY - 1].occupant = this;
+            currentRoom.tileSet[positionX][positionY - 1].setActor(this);
             positionY -= 1;
             updateRenderPosition();
 
         } else {
             System.out.println("in 4");
             interact(inFrontOf);
+
+            /* 
+            if (currentRoom.tileSet[inFrontOf.getPositionX()][inFrontOf.getPositionY()].getActor() == null) {
+                currentRoom.tileSet[positionX][positionY - 1].setActor(this);
+                positionY -= 1;
+                updateRenderPosition();
+            }
+            */
         }
 
     }
 
+    /**
+     *  A method.
+     */
     public void moveDown() {
 
         //Checks what is in front of the actor
@@ -99,13 +112,21 @@ public class Actor {
         inFrontOf = currentRoom.getInFrontOf(positionX, positionY + 1);
         if (inFrontOf == null) { // if tile in front of is not occupied 
             deleteFromCurrentTile();
-            currentRoom.tileSet[positionX][positionY + 1].occupant = this;
+            currentRoom.tileSet[positionX][positionY + 1].setActor(this);
             positionY += 1;
             updateRenderPosition();
 
         } else {
 
             interact(inFrontOf);
+
+            /* 
+            if (currentRoom.tileSet[inFrontOf.getPositionX()][inFrontOf.getPositionY()].getActor() == null) {
+                currentRoom.tileSet[positionX][positionY + 1].setActor(this);
+                positionY += 1;
+                updateRenderPosition();
+            }
+            */
         }
 
     }
@@ -124,12 +145,20 @@ public class Actor {
         inFrontOf = currentRoom.getInFrontOf(positionX - 1, positionY);
         if (inFrontOf == null) { // if tile in front of is not occupied 
             deleteFromCurrentTile();
-            currentRoom.tileSet[positionX - 1][positionY].occupant = this;
+            currentRoom.tileSet[positionX - 1][positionY].setActor(this);;
             positionX -= 1;
             updateRenderPosition();
 
         } else {
             interact(inFrontOf);
+
+            /*
+            if (currentRoom.tileSet[inFrontOf.getPositionX()][inFrontOf.getPositionY()].getActor() == null) {
+                currentRoom.tileSet[positionX - 1][positionY].setActor(this);;
+                positionX -= 1;
+                updateRenderPosition();
+            }
+            */
         } 
 
     }
@@ -150,13 +179,21 @@ public class Actor {
         inFrontOf = currentRoom.getInFrontOf(positionX + 1, positionY);
         if (inFrontOf == null) { // if tile in front of is not occupied 
             deleteFromCurrentTile();
-            currentRoom.tileSet[positionX + 1][positionY].occupant = this;
+            currentRoom.tileSet[positionX + 1][positionY].setActor(this);
             positionX += 1;
             updateRenderPosition();
 
         } else {
             System.out.println("In3");
-            interact(inFrontOf);
+            interact(inFrontOf);   
+            
+            /* 
+            if (currentRoom.tileSet[inFrontOf.getPositionX()][inFrontOf.getPositionY()].getActor() == null) {
+                currentRoom.tileSet[positionX + 1][positionY].setActor(this);
+                positionX += 1;
+                updateRenderPosition();
+            }
+            */
             
         }
 
@@ -172,9 +209,11 @@ public class Actor {
      */
     void interact(Actor interactee) {
 
+        System.out.println(interactee);
         if (interactee.healthPoints <= 0) { //If the HP
             //loot the dead body:
-            doSpecialInteraction(interactee);
+            ((Player) this).doSpecialInteraction(interactee);
+
             
         } else {
             System.out.println("Here");
@@ -182,25 +221,11 @@ public class Actor {
         }
     }
 
-    void doSpecialInteraction(Actor interactee) {
-        if (getType() == "player") {
-            switch (interactee.getType()) {
-                case "door" -> {
-                    currentRoom = ((Door) interactee).nextRoom;
-                    updatePositionInNewRoom(interactee);
-                }
-                case "monster" -> {
-                    System.out.println("Looting");
-                    coins = interactee.giveCoins();
-                    System.out.println("I now have: " + coins + " coins");
-                    interactee.healthPoints = -1; // test
-                    interactee.deleteFromCurrentTile();
-                }
-                default -> {
-                }
-            }
-        }
-        
+    
+
+    void loot() {
+
+
     }
 
     /**
@@ -214,6 +239,7 @@ public class Actor {
         // Math determination of damage dealt to defender.
         System.out.println("Defender now has " + defender.healthPoints + " HP");
         defender.healthPoints -= strength;
+        GamePainter.paintMessage("Dealt " + strength + " damage to " + defender.getType());
         System.out.println("Attacker attacks for: " + strength);
         System.out.println("Defender now has " + defender.healthPoints + " HP");
     }
@@ -273,6 +299,11 @@ public class Actor {
 
     }
 
+    void updatePositionInNewStage() {
+        
+
+    }
+
     /**
      * Method that nulls the occupant at the index position of this actor
      * in the current room.
@@ -293,11 +324,11 @@ public class Actor {
     }
 
     public int getRenderPositionX() {
-        return renderPositionX + 192; //Non-variable integer is start position
+        return renderPositionX + 4 * tileSize; //Non-variable integer is start position
     }
 
     public int getRenderPositionY() {
-        return renderPositionY + 96;
+        return renderPositionY + 2 * tileSize;
     }
 
     public String getType() {
@@ -306,5 +337,13 @@ public class Actor {
 
     public void setCurrentRoom(Room r) {
         currentRoom = r;
+    }
+
+    public void setPositionX(int x) {
+        positionX = x;
+    }
+
+    public void setPositionY(int y) {
+        positionY = y;
     }
 }

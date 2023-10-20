@@ -16,17 +16,17 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements ActionListener {
 
     // Screen Configuration
-    final int originalTileSize = 8;
-    final int sizeScaler = 6; // Scales pixelated graphics
-    final int actualTileSize = originalTileSize * sizeScaler;
+    static final int ORIGINAL_TILE_SIZE = 8;
+    static final int SIZE_SCALER = 6; // Scales pixelated graphics
+    public static final int REAL_TILE_SIZE = ORIGINAL_TILE_SIZE * SIZE_SCALER;
 
     // 4 : 3 Ratio - Number of Tiles Rendered at a time
-    final int maxTilesColumn = 16;
-    final int maxTilesRow = 12;
+    static final int MAX_COLUMN_TILES = 17;
+    static final int MAX_ROW_TILES = 17;
 
     // SCREEN SETTINGS determined by scaled up tiles and number of tiles rendered
-    final int screenWidth = actualTileSize * maxTilesColumn;
-    final int screenHeight = actualTileSize * maxTilesRow;
+    static final int SCREEN_WIDTH = REAL_TILE_SIZE * MAX_COLUMN_TILES;
+    static final int SCREEN_HEIGHT = REAL_TILE_SIZE * MAX_ROW_TILES;
 
 
     // Input Handlers
@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public GamePanel() {
 
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setLayout(null);
@@ -51,12 +51,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
         GameLoop.startGame();
 
-        painter = new GamePainter(GameLoop.currentRoom, actualTileSize);
+        painter = new GamePainter(GameLoop.currentRoom);
         GameLoop.painter = painter;
 
-        System.out.println(actualTileSize);
-        System.out.println(screenHeight);
-        System.out.println(screenWidth);
+        System.out.println(REAL_TILE_SIZE);
+        System.out.println(SCREEN_HEIGHT);
+        System.out.println(SCREEN_WIDTH);
     }
 
     @Override
@@ -70,8 +70,8 @@ public class GamePanel extends JPanel implements ActionListener {
         // Paint the screen and the game.
 
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, screenWidth, screenHeight);
-        painter.paintRoom();
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        painter.paintGame();
         
         // update the GameLoop based on player input.
         try { // the update() method of GameLoop utilizes Thread sleep so try/catch is needed.

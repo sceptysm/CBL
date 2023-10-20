@@ -1,6 +1,7 @@
 package environment;
 
 import actors.Actor;
+import gui.GamePanel;
 
 
 public class Tile {
@@ -11,6 +12,9 @@ public class Tile {
     private int renderPositionY;
     public boolean walkable;
     public Actor occupant;  //Actor at tile.
+
+    int tileSize = GamePanel.REAL_TILE_SIZE;
+
     
 
     Tile() {
@@ -29,7 +33,6 @@ public class Tile {
     }
 
     void updateRenderPosition() {
-        int tileSize = 48;
         renderPositionX = positionX * tileSize;
         renderPositionY = positionY * tileSize;
     }
@@ -59,11 +62,15 @@ public class Tile {
         occupant.setCurrentRoom(r);
     }
 
+    public void setActor(Actor a) {
+        occupant = a;
+    }
+
     public int getRenderPositionX() {
-        return renderPositionX + 192;
+        return renderPositionX + 4 * tileSize;
     }
 
     public int getRenderPositionY() {
-        return renderPositionY + 96;
+        return renderPositionY + 2 * tileSize;
     }
 }

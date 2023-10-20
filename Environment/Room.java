@@ -6,8 +6,6 @@ import actors.Actor;
 import actors.Door;
 import actors.Monster;
 import actors.Treasure;
-import environment.Tile;
-import environment.Wall;
 import actors.Player;
 import actors.*;
 
@@ -205,11 +203,11 @@ public abstract class Room implements Paintable {
 
             // check if there is something already on the
             // coordinates, or they are the center coordinates
-            if (tileSet[j][k].getActor() != null || (k == 5 && j == 5)) {
+            if (tileSet[j][k].getActor() != null || (k == 4 && j == 4)) {
                 // if yes, do nothing but do not count this toward the loop
                 i--;
             } else {
-                tileSet[j][k].setActor(new Treasure(5, 5), this);;
+                tileSet[j][k].setActor(new Treasure(j, k), this);;
             }
         }
     }
@@ -317,6 +315,9 @@ class StartRoom extends Room {
         super(nr);
         special = new Tile();
         special.occupant = p;
+        special.occupant.setPositionX(4);
+        special.occupant.setPositionY(4);
+
         special.occupant.currentRoom = this;
 
     }

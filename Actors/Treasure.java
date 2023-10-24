@@ -123,9 +123,12 @@ public class Treasure extends Actor {
      * @return an item inside the treasure.
      */
     Item give() {
-        System.out.println(inventory.elementAt(0));
-        //Implement change sprite to an opened treasure box. 
-        return inventory.remove(0);
+        //Implement change sprite to an opened treasure box.
+        if (!inventory.isEmpty()) { 
+            return inventory.remove(0);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -137,4 +140,5 @@ public class Treasure extends Actor {
     int giveCoins() {
         return coins;
     }
+
 }

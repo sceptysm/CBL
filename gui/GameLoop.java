@@ -1,6 +1,5 @@
 package gui;
 
-import actors.Actor;
 import actors.Player;
 import environment.Room;
 import environment.Stage;
@@ -23,9 +22,9 @@ public class GameLoop {
 
     //Variables inside the Stage
 
-    //private static Monster[] monsters;
     static int stageNumber; 
     private static boolean playerDied = false;
+    private static boolean inventoryIsOpen = false;
     
 
     GameLoop() {
@@ -68,6 +67,10 @@ public class GameLoop {
             return;
         }
 
+        if (inventoryIsOpen) {
+            painter.paintInventory();
+        }
+
         if (KeyboardHandler.isKeyDown(KeyEvent.VK_W)) {
             player.moveUp();
             currentRoom.doMonstersTurn(player);
@@ -83,6 +86,10 @@ public class GameLoop {
         if (KeyboardHandler.isKeyDown(KeyEvent.VK_D)) {
             player.moveRight();
             currentRoom.doMonstersTurn(player);
+        }
+
+        if (KeyboardHandler.isKeyDown(KeyEvent.VK_I)) {
+            inventoryIsOpen = !inventoryIsOpen;
         }
         //If the turn is over and the player has 0 hp:
 

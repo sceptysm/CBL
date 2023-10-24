@@ -7,7 +7,7 @@ public class MouseHandler implements MouseInputListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
+        
     }
 
     @Override
@@ -39,5 +39,6 @@ public class MouseHandler implements MouseInputListener {
     public void mouseMoved(MouseEvent e) {
         // TODO Auto-generated method stub
     }
+
     
 }

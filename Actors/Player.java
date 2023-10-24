@@ -3,7 +3,7 @@ package actors;
 import java.util.Vector;
 
 import gui.GameLoop;
-
+import gui.GamePainter;
 import items.weapons.Weapon;
 import items.helms.Helm;
 import items.armor.Armor;
@@ -35,7 +35,7 @@ public class Player extends Actor {
         permanentStrength = strength = 5;
         permanentDefense = defense = 1;
         permanentAgility = agility = 1;
-        inventory = new Vector<>();
+        inventory = new Vector<>(6);
     }
 
     void doSpecialInteraction(Actor interactee) {
@@ -47,19 +47,26 @@ public class Player extends Actor {
                     updatePositionInNewRoom(interactee);
                 }
                 case "monster" -> {
-                    coins += interactee.giveCoins();
+                    int coinsToTake = interactee.giveCoins();
+                    GamePainter.addMessage("You loot the monster and find " 
+                        + coinsToTake + " coins.");
+                    coins += coinsToTake;
                     score += 100;
                     interactee.deleteFromCurrentTile();
                     currentRoom.monsterList.remove(interactee);
                 }
                 case "treasure" -> {
-                    inventory.add(((Treasure) interactee).give());
+                    if (!interactee.inventoryIsEmpty() && inventory.size() < 6) {
+                        inventory.add(((Treasure) interactee).give());
+                    } else {
+                        GamePainter.addMessage("Your inventory is full.");
+                    }
                 }
                 case "obelisk" -> {
                     //generate new stage
                     GameLoop.newStage();
+                    GamePainter.addMessage("You traversed to a new stage!");
                     score += 1000 * (GameLoop.getStageNumber() - 1);
-                    //GamePainter.setCurrentRoom(currentRoom);
                     updateRenderPosition();
                     //update Rendering
 

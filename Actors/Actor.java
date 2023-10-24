@@ -217,6 +217,8 @@ public class Actor {
 
         // Math determination of damage dealt to defender.
         defender.healthPoints -= strength;
+        
+        GamePainter.addMessage("Dealt " + strength + " damage to " + defender.getType());
         //GamePainter.paintMessage("Dealt " + strength + " damage to " + defender.getType());
     }
 
@@ -285,6 +287,10 @@ public class Actor {
     void deleteFromCurrentTile() {
         currentRoom.tileSet[positionX][positionY].occupant = null;
 
+    }
+
+    public boolean inventoryIsEmpty() {
+        return inventory.isEmpty();
     }
 
     // Utility Get and Set Methods :

@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
@@ -54,6 +55,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
         painter = new GamePainter(GameLoop.currentRoom);
         GameLoop.painter = painter;
+
     }
 
     @Override
@@ -63,6 +65,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
         // Initialize Graphics g inside the painter object.
         painter.setGraphics(g);
+        painter.setMousePosition(getMousePoint());
 
         // Paint the screen and the game.
 
@@ -84,5 +87,13 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         
+    }
+
+    public Point getMousePoint() {
+        if (getMousePosition() != null) {
+            return getMousePosition();
+        } else {
+            return new Point(-1, -1);
+        }
     }
 }

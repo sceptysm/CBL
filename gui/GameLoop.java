@@ -1,7 +1,6 @@
 package gui;
 
 import actors.Actor;
-import actors.Monster;
 import actors.Player;
 import environment.Room;
 import environment.Stage;
@@ -18,15 +17,15 @@ public class GameLoop {
     public static GamePainter painter;
 
     //Control variables
-    public static Player player;
-    public static Actor testMonster;
+    static Player player;
     private static Stage stage;
     public static Room currentRoom;
 
     //Variables inside the Stage
 
-    private static Monster[] monsters;
+    //private static Monster[] monsters;
     static int stageNumber; 
+    private static boolean playerDied = false;
     
 
     GameLoop() {
@@ -37,14 +36,15 @@ public class GameLoop {
         init();
     }
 
+    public static void gameOver() {
+        
+    }
+
     public static void newStage() {
         stageNumber += 1;
         stage = new Stage(stageNumber, player);
         currentRoom = stage.startRoom;
         stage.generateStage(currentRoom);
-        stage.printTest();
-        System.out.println(currentRoom);
-
     }
 
     private static void init() {
@@ -53,10 +53,6 @@ public class GameLoop {
         currentRoom = stage.startRoom;
         stage.generateStage(currentRoom);
         player = stage.player;
-        stage.printTest();
-        System.out.println(currentRoom);
-
-        
     }
 
     /**
@@ -65,21 +61,35 @@ public class GameLoop {
      */
     public static void update() throws InterruptedException {
 
-        Thread.sleep(12);
+        Thread.sleep(5);
+
+        if (playerDied) {
+            painter.paintGameOver();
+            return;
+        }
 
         if (KeyboardHandler.isKeyDown(KeyEvent.VK_W)) {
             player.moveUp();
+            currentRoom.doMonstersTurn(player);
         } 
         if (KeyboardHandler.isKeyDown(KeyEvent.VK_A)) {
             player.moveLeft();
+            currentRoom.doMonstersTurn(player);
         }  
         if (KeyboardHandler.isKeyDown(KeyEvent.VK_S)) {
             player.moveDown();
+            currentRoom.doMonstersTurn(player);
         }  
         if (KeyboardHandler.isKeyDown(KeyEvent.VK_D)) {
             player.moveRight();
+            currentRoom.doMonstersTurn(player);
         }
-        
+        //If the turn is over and the player has 0 hp:
+
+        if (player.getHealthPoints() <= 0) {
+            playerDied = true;
+        } 
+
     }
 
     public static int getStageNumber() {

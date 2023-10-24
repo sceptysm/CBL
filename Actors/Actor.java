@@ -4,7 +4,6 @@ import environment.Room;
 import java.util.Random;
 import java.util.Vector;
 import items.Item;
-import gui.GameLoop;
 import gui.GamePainter;
 import gui.GamePanel;
 
@@ -33,7 +32,6 @@ public class Actor {
 
     //character type
     String type;
-
 
     //in game inventory of items
     public Vector<Item> inventory;
@@ -66,7 +64,8 @@ public class Actor {
         boolean onGrid = (positionY - 1) > -1;
         Actor inFrontOf;
 
-        if (!onGrid) { //If in front of is not a tile in the grid :
+        if (!onGrid || !currentRoom.tileSet[positionX][positionY - 1].isWalkable()) { 
+            //If in front of is not a tile in the grid :
             return;
         }
          
@@ -79,16 +78,7 @@ public class Actor {
             updateRenderPosition();
 
         } else {
-            System.out.println("in 4");
             interact(inFrontOf);
-
-            /* 
-            if (currentRoom.tileSet[inFrontOf.getPositionX()][inFrontOf.getPositionY()].getActor() == null) {
-                currentRoom.tileSet[positionX][positionY - 1].setActor(this);
-                positionY -= 1;
-                updateRenderPosition();
-            }
-            */
         }
 
     }
@@ -101,10 +91,11 @@ public class Actor {
         //Checks what is in front of the actor
 
         //condition for Index out of bounds
-        boolean onGrid = (positionY + 1) < currentRoom.getRoomSize(); 
+        boolean onGrid = (positionY + 1) < Room.getRoomSize(); 
         Actor inFrontOf;
 
-        if (!onGrid) { //If in front of is not a tile in the grid :
+        if (!onGrid || !currentRoom.tileSet[positionX][positionY + 1].isWalkable()) { 
+            //If in front of is not a tile in the grid :
             return;
         }
          
@@ -120,13 +111,6 @@ public class Actor {
 
             interact(inFrontOf);
 
-            /* 
-            if (currentRoom.tileSet[inFrontOf.getPositionX()][inFrontOf.getPositionY()].getActor() == null) {
-                currentRoom.tileSet[positionX][positionY + 1].setActor(this);
-                positionY += 1;
-                updateRenderPosition();
-            }
-            */
         }
 
     }
@@ -137,7 +121,8 @@ public class Actor {
         boolean onGrid = (positionX - 1) > -1;
         Actor inFrontOf;
 
-        if (!onGrid) { //If in front of is not a tile in the grid :
+        if (!onGrid || !currentRoom.tileSet[positionX - 1][positionY].isWalkable()) { 
+            //If in front of is not a tile in the grid :
             return;
         }
          
@@ -152,13 +137,6 @@ public class Actor {
         } else {
             interact(inFrontOf);
 
-            /*
-            if (currentRoom.tileSet[inFrontOf.getPositionX()][inFrontOf.getPositionY()].getActor() == null) {
-                currentRoom.tileSet[positionX - 1][positionY].setActor(this);;
-                positionX -= 1;
-                updateRenderPosition();
-            }
-            */
         } 
 
     }
@@ -168,10 +146,11 @@ public class Actor {
         //Checks what is in front of the actor
 
         //condition for Index out of bounds
-        boolean onGrid = (positionX + 1) < currentRoom.getRoomSize();
+        boolean onGrid = (positionX + 1) < Room.getRoomSize();
         Actor inFrontOf;
 
-        if (!onGrid) { //If in front of is not a tile in the grid :
+        if (!onGrid || !currentRoom.tileSet[positionX + 1][positionY].isWalkable()) { 
+            //If in front of is not a tile in the grid :
             return;
         }
          
@@ -184,16 +163,8 @@ public class Actor {
             updateRenderPosition();
 
         } else {
-            System.out.println("In3");
             interact(inFrontOf);   
-            
-            /* 
-            if (currentRoom.tileSet[inFrontOf.getPositionX()][inFrontOf.getPositionY()].getActor() == null) {
-                currentRoom.tileSet[positionX + 1][positionY].setActor(this);
-                positionX += 1;
-                updateRenderPosition();
-            }
-            */
+        
             
         }
 
@@ -202,22 +173,30 @@ public class Actor {
 
     /**
      * Method that initializes actor interaction from which further 
-     * in-game interactions are called based on the interaction required 
+     * in-game interactions are called based on the  interaction required 
      * in regard to the type/state of actor with which this actor interacts.
      * 
      * @param interactee the actor with which this actor interacts
      */
     void interact(Actor interactee) {
 
-        System.out.println(interactee);
-        if (interactee.healthPoints <= 0) { //If the HP
+        if (interactee.healthPoints <= 0 && getType().equals("player")) { //If the HP
             //loot the dead body:
             ((Player) this).doSpecialInteraction(interactee);
 
-            
-        } else {
-            System.out.println("Here");
+        } else if (getType().equals("player") && interactee.healthPoints > 0) {
             attack(interactee);
+
+        } else if (interactee.getType().equals("player")) {
+            /*If the actor is not a player and the actor to interact with is a player:
+            In other words, when an actor is not a player (the actor is a monster),
+            and if they are moving into a player (attacking a player), they the player.
+            */
+            attack(interactee);
+
+        } else {
+            //Otherwise, do nothing.
+            return; 
         }
     }
 
@@ -237,11 +216,8 @@ public class Actor {
         Actor defender = d;
 
         // Math determination of damage dealt to defender.
-        System.out.println("Defender now has " + defender.healthPoints + " HP");
         defender.healthPoints -= strength;
-        GamePainter.paintMessage("Dealt " + strength + " damage to " + defender.getType());
-        System.out.println("Attacker attacks for: " + strength);
-        System.out.println("Defender now has " + defender.healthPoints + " HP");
+        //GamePainter.paintMessage("Dealt " + strength + " damage to " + defender.getType());
     }
 
     /**
@@ -275,7 +251,6 @@ public class Actor {
             case "north" -> {
                 positionX = 4;
                 positionY = 7;
-                System.out.println("north");
             }
             case "east" -> {
                 positionX = 1;
@@ -301,7 +276,6 @@ public class Actor {
 
     void updatePositionInNewStage() {
         
-
     }
 
     /**
@@ -329,6 +303,10 @@ public class Actor {
 
     public int getRenderPositionY() {
         return renderPositionY + 2 * tileSize;
+    }
+
+    public int getHealthPoints() {
+        return healthPoints;
     }
 
     public String getType() {

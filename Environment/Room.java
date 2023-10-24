@@ -1,6 +1,7 @@
 package environment;
 
 import java.util.Random;
+import java.util.Vector;
 
 import actors.Actor;
 import actors.Door;
@@ -23,9 +24,15 @@ public abstract class Room implements Paintable {
     public Tile[][] tileSet;
     public Tile special;
 
+    // stage number
+    int stageNumber;
+
+    // list of all monsters in the room
+    public Vector<Monster> monsterList;
+
     // variables used in traverse algorithm
     private int roomNumber;
-    public boolean northBranchVisit;
+    boolean northBranchVisit;
     boolean eastBranchVisit;
     boolean southBranchVisit;
     boolean westBranchVisit;
@@ -48,15 +55,15 @@ public abstract class Room implements Paintable {
      * 
      * @param nr The number of the room. The variable is used in stage generation.
      */
-    Room(int nr) {
+    Room(int nr, int stageNr) {
 
         this.roomNumber = nr;
+        this.stageNumber = stageNr;
         tileSet = new Tile[ROOM_SIZE][ROOM_SIZE];
         northBranchVisit = eastBranchVisit = southBranchVisit = westBranchVisit = false;
         random = new Random();
-
-        //generateRoom(nr);
         
+        monsterList = new Vector<>(50);
     }
 
     /**
@@ -81,9 +88,7 @@ public abstract class Room implements Paintable {
     /**
      * Method to generate rooms.
     */
-    public void generateRoom(int stageNumber) {
-
-        //System.out.println("generate room ran");
+    public void generateRoom() {
 
         fillWithEmptyTiles();
         fillWithWalls();
@@ -100,14 +105,13 @@ public abstract class Room implements Paintable {
 
         applySpecial();
         generateDoors();
-        System.out.println("generate room end");
     }
 
     public void fillWithEmptyTiles() {
 
         for (int i = 0; i < ROOM_SIZE; i++) {
             for (int j = 0; j < ROOM_SIZE; j++) {
-                tileSet[i][j] = new Tile();
+                tileSet[i][j] = new Tile(i, j);
             }
         }
     }
@@ -152,7 +156,7 @@ public abstract class Room implements Paintable {
             }
             System.out.println();
         }
-            System.out.println("");
+        System.out.println("");
     }
 
     /**
@@ -166,20 +170,24 @@ public abstract class Room implements Paintable {
 
     /**
      * Generates doors for a room, if there are any.
-     */    
+     */
     public void generateDoors() {
         // method will be modified once door functionality is finished
         if (hasNorthRoom()) {
             tileSet[4][0].setActor(new Door(4, 0, northRoom, "north"), this);
+            tileSet[4][0].setWalkable(true);
         }
         if (hasEastRoom()) {
             tileSet[8][4].setActor(new Door(8, 4, eastRoom, "east"), this);
+            tileSet[8][4].setWalkable(true);
         }
         if (hasSouthRoom()) {
             tileSet[4][8].setActor(new Door(4, 8, southRoom, "south"), this);
+            tileSet[4][8].setWalkable(true);
         }
         if (hasWestRoom()) {
             tileSet[0][4].setActor(new Door(0, 4, westRoom, "west"), this);
+            tileSet[0][4].setWalkable(true);
         }
     }
 
@@ -191,15 +199,16 @@ public abstract class Room implements Paintable {
             if (tileSet[j][k].getActor() != null) {
                 i--;
             } else {
-                tileSet[j][k].setActor(new Monster("monster", j, k), this);;
+                tileSet[j][k].setActor(new Monster("monster", j, k, stageNumber), this);
+                monsterList.add((Monster) tileSet[j][k].occupant);
             }
         }
     }
 
     public void generateTreasure(int numberOfTreasure) {
         for (int i = 0; i < numberOfTreasure; i++) {
-            int j = random.nextInt(1, 7);
-            int k = random.nextInt(1, 7);
+            int j = random.nextInt(2, 6);
+            int k = random.nextInt(2, 6);
 
             // check if there is something already on the
             // coordinates, or they are the center coordinates
@@ -207,9 +216,68 @@ public abstract class Room implements Paintable {
                 // if yes, do nothing but do not count this toward the loop
                 i--;
             } else {
-                tileSet[j][k].setActor(new Treasure(j, k), this);;
+                tileSet[j][k].setActor(new Treasure(j, k, stageNumber), this);
+
             }
         }
+    }
+
+    /**
+     * For each monster in the room, update its stats.
+     */
+    public void updateMonsterStats() {
+        for (Monster m : monsterList) {
+            m.updateStats();
+        }
+    }
+
+    /**
+     * 
+     */
+    public void doMonstersTurn(Player player) {
+        int playerX = player.getPositionX();
+        int playerY = player.getPositionY();
+
+        boolean horizontalMoveable = true;
+        boolean verticalMoveable = true;
+        
+        for (Monster currentMonster : monsterList) {
+            // lock movement
+            horizontalMoveable = !(playerX == currentMonster.getPositionX());
+            verticalMoveable = !(playerY == currentMonster.getPositionY());
+
+            if (currentMonster.getHealthPoints() <= 0) {
+                continue;
+            }
+
+            // if moveable in both axes, pick one at random
+            if (horizontalMoveable && verticalMoveable) {
+                double i = Math.random();
+                horizontalMoveable = i < 0.5;
+                verticalMoveable = i >= 0.5;
+            }
+
+            // right movement
+            if (horizontalMoveable && currentMonster.getPositionX() < playerX) {
+                currentMonster.moveRight();
+            }
+
+            // left movement
+            if (horizontalMoveable && currentMonster.getPositionX() > playerX) {
+                currentMonster.moveLeft();
+            }
+            
+            // down movement
+            if (verticalMoveable && currentMonster.getPositionY() < playerY) {
+                currentMonster.moveDown();
+            }
+
+            // upwards movement
+            if (verticalMoveable && currentMonster.getPositionY() > playerY) {
+                currentMonster.moveUp();
+            }
+        }
+        
     }
 
     // UTILITY BOOLEAN METHODS
@@ -298,12 +366,6 @@ public abstract class Room implements Paintable {
 
 }
 
-
-
-
-
-
-
 // Children Classes of the Room Class.
 
 class StartRoom extends Room {
@@ -311,9 +373,9 @@ class StartRoom extends Room {
     /**
      * Constructor for the StartRoom.
      */
-    StartRoom(int nr, Player p) {
-        super(nr);
-        special = new Tile();
+    StartRoom(int nr, int stageNr, Player p) {
+        super(nr, stageNr);
+        special = new Tile(4, 4);
         special.occupant = p;
         special.occupant.setPositionX(4);
         special.occupant.setPositionY(4);
@@ -330,12 +392,12 @@ class StartRoom extends Room {
 
 class DungeonRoom extends Room {
 
-    DungeonRoom(int nr) {
-        super(nr);
+    DungeonRoom(int nr, int stageNr) {
+        super(nr, stageNr);
 
         enemySpawnModifier = 1.0;
-        treasureSpawnModifier = 1.0;
-        special = new Tile();
+        treasureSpawnModifier = 0.01 * stageNumber;
+        special = new Tile(4, 4);
 
     }
 
@@ -347,10 +409,10 @@ class DungeonRoom extends Room {
 
 class TreasureRoom extends Room {
 
-    TreasureRoom(int nr) {
-        super(nr);
-        special = new Tile();
-        special.occupant = new Treasure(4, 4);
+    TreasureRoom(int nr, int stageNr) {
+        super(nr, stageNr);
+        special = new Tile(4, 4);
+        special.occupant = new Treasure(4, 4, stageNumber);
         special.occupant.currentRoom = this;
 
         enemySpawnModifier = 0.0;
@@ -365,9 +427,9 @@ class TreasureRoom extends Room {
 
 class EndRoom extends Room {
 
-    EndRoom(int nr) {
-        super(nr);
-        special = new Tile();
+    EndRoom(int nr, int stageNr) {
+        super(nr, stageNr);
+        special = new Tile(4, 4);
         special.occupant = new Obelisk(4, 4);
         special.occupant.currentRoom = this;
 

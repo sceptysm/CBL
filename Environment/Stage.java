@@ -3,7 +3,6 @@ package environment;
 import actors.Actor;
 import actors.Player;
 import gui.GamePainter;
-
 import java.util.Random;
 import java.util.Vector;
 
@@ -48,7 +47,7 @@ public class Stage {
         player = new Player("player", 4, 4);
         // initalize the stage with just a startroom
         //this.startRoom = new StartRoom(currentNumberOfRooms, player);
-        this.startRoom = new StartRoom(currentNumberOfRooms, player);
+        this.startRoom = new StartRoom(currentNumberOfRooms, stageNumber, player);
         // initialize Random
         this.random = new Random();
 
@@ -83,7 +82,7 @@ public class Stage {
         player = p;
 
         // initalize the stage with just a startroom
-        this.startRoom = new StartRoom(currentNumberOfRooms, p);
+        this.startRoom = new StartRoom(currentNumberOfRooms, stageNumber, p);
         // initialize Random
         this.random = new Random();
         GamePainter.setCurrentRoom(startRoom);
@@ -105,11 +104,7 @@ public class Stage {
      * A method that prints out the test.
      */
     public void printTest() {
-        System.out.println("printtest ran");
-        System.out.println(test.elementAt(0));
-        System.out.println(test.elements());
         for (int i = 0; i < test.size(); i++) {
-            System.out.println("test has elements");
             System.out.println(test.elementAt(i).getType()
                 + " " + test.elementAt(i).getRoomNumber());
             test.elementAt(i).printRoom();
@@ -142,7 +137,7 @@ public class Stage {
         }
 
         if (currentNumberOfRooms > roomCapacity - 1) {
-            Room end = new EndRoom(currentNumberOfRooms);
+            Room end = new EndRoom(currentNumberOfRooms, stageNumber);
 
             if (currentRoom.northRoom != null && !hasEnd) {
                 // establish a 2 way connection
@@ -150,7 +145,7 @@ public class Stage {
                 currentRoom.southRoom.northRoom = currentRoom;
 
                 // generate the room
-                end.generateRoom(stageNumber);
+                end.generateRoom();
 
                 // do things necessary for algorithm
                 currentNumberOfRooms++;
@@ -162,7 +157,7 @@ public class Stage {
             if (currentRoom.eastRoom != null && !hasEnd) {
                 currentRoom.westRoom = end;
                 currentRoom.westRoom.eastRoom = currentRoom;
-                end.generateRoom(stageNumber);
+                end.generateRoom();
 
                 currentNumberOfRooms++;
                 test.add(currentRoom.westRoom);
@@ -171,7 +166,7 @@ public class Stage {
             if (currentRoom.southRoom != null && !hasEnd) {
                 currentRoom.northRoom = end;
                 currentRoom.northRoom.southRoom = currentRoom;
-                end.generateRoom(stageNumber);
+                end.generateRoom();
 
                 currentNumberOfRooms++;
                 test.add(currentRoom.northRoom);
@@ -180,7 +175,7 @@ public class Stage {
             if (currentRoom.westRoom != null && !hasEnd) {
                 currentRoom.eastRoom = end;
                 currentRoom.eastRoom.westRoom = currentRoom;
-                end.generateRoom(stageNumber);
+                end.generateRoom();
 
                 currentNumberOfRooms++;
                 test.add(currentRoom.eastRoom);
@@ -200,9 +195,9 @@ public class Stage {
             //generate a random variable that determines what type of room is to be generated
             randomVariable = Math.random();
             if (randomVariable < 0.2) {
-                tempRoom = new TreasureRoom(currentNumberOfRooms);
+                tempRoom = new TreasureRoom(currentNumberOfRooms, stageNumber);
             } else {
-                tempRoom = new DungeonRoom(currentNumberOfRooms);
+                tempRoom = new DungeonRoom(currentNumberOfRooms, stageNumber);
             }
             currentRoom.northRoom = tempRoom;
             currentRoom.northRoom.southRoom = currentRoom;
@@ -211,9 +206,9 @@ public class Stage {
         if (genEast) {
             randomVariable = Math.random();
             if (randomVariable < 0.2) {
-                tempRoom = new TreasureRoom(currentNumberOfRooms);
+                tempRoom = new TreasureRoom(currentNumberOfRooms, stageNumber);
             } else {
-                tempRoom = new DungeonRoom(currentNumberOfRooms); 
+                tempRoom = new DungeonRoom(currentNumberOfRooms, stageNumber); 
             }
 
             currentRoom.eastRoom = tempRoom;
@@ -223,9 +218,9 @@ public class Stage {
         if (genSouth) {
             randomVariable = Math.random();
             if (randomVariable < 0.2) {
-                tempRoom = new TreasureRoom(currentNumberOfRooms);
+                tempRoom = new TreasureRoom(currentNumberOfRooms, stageNumber);
             } else {
-                tempRoom = new DungeonRoom(currentNumberOfRooms);
+                tempRoom = new DungeonRoom(currentNumberOfRooms, stageNumber);
             }
             currentRoom.southRoom = tempRoom;
             currentRoom.southRoom.northRoom = currentRoom;
@@ -234,9 +229,9 @@ public class Stage {
         if (genWest) {
             randomVariable = Math.random();
             if (randomVariable < 0.2) {
-                tempRoom = new TreasureRoom(currentNumberOfRooms);
+                tempRoom = new TreasureRoom(currentNumberOfRooms, stageNumber);
             } else {
-                tempRoom = new DungeonRoom(currentNumberOfRooms);
+                tempRoom = new DungeonRoom(currentNumberOfRooms, stageNumber);
             }
 
             currentRoom.westRoom = tempRoom;
@@ -251,7 +246,7 @@ public class Stage {
             generateStage(currentRoom);
         }
 
-        currentRoom.generateRoom(stageNumber);
+        currentRoom.generateRoom();
     }
 
     public void traverseStage (Room currentRoom) {
@@ -293,9 +288,7 @@ public class Stage {
         }
     }
 
-
     // Utility : Get and Set Methods 
-
 
     public Room getStartRoom() {
         return startRoom;

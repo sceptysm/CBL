@@ -6,6 +6,10 @@ import actors.Player;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import org.w3c.dom.Text;
+
 import environment.Tile;
 import environment.Room;
 import environment.Wall;
@@ -36,8 +40,6 @@ public class GamePainter {
 
         //screenHeight = GamePanel.SCREEN_HEIGHT;
         //screenWidth = GamePanel.SCREEN_WIDTH;
-
-        System.out.println("Size: " + roomSize);
     }
 
     void paintGame() {
@@ -70,17 +72,21 @@ public class GamePainter {
     
     void paintTile(int row, int column) {
         Tile tile = currentTileSet[row][column];
+        BufferedImage textureToPaint;
+
 
         // Paint the tile
-        g.setColor(Color.BLACK);
 
         if (tile instanceof Wall) {
-            g.setColor(Color.GRAY);
-            g.fillRect(tile.getRenderPositionX(), tile.getRenderPositionY(), tileSize, tileSize);
-        } 
+            textureToPaint = Textures.getSprite("wall");
+        } else {
+            textureToPaint = Textures.getSprite("floor");
+        }
+
+        g.drawImage(textureToPaint, tile.getRenderPositionX(),
+            tile.getRenderPositionY(), tileSize, tileSize, null);
         
         if (tile.hasActor()) {
-
             // Paint the actor, by fetching the actor at the current tile.
             paintActor(tile.getActor());
         }
@@ -93,47 +99,46 @@ public class GamePainter {
      * @param actor the actor object to be painted.
      */
     void paintActor(Actor actor) {
+        BufferedImage textureToPaint;
 
+        
         switch (actor.getType()) {
             case "player" -> {
                 player = actor;
-                g.setColor(Color.WHITE);
-                g.fillRect(actor.getRenderPositionX(),
-                        actor.getRenderPositionY(), tileSize, tileSize);
+                textureToPaint = Textures.getSprite(actor.getType());
+                g.drawImage(textureToPaint, actor.getRenderPositionX(),
+                    actor.getRenderPositionY(), tileSize, tileSize, null);
             }
             case "monster" -> {
-                if (actor.healthPoints >= 0) {
-                    g.setColor(Color.RED);
-                    g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
-                            tileSize, tileSize);
+                if (actor.healthPoints > 0) {
+                    textureToPaint = Textures.getSprite(actor.getType());
+                    g.drawImage(textureToPaint, actor.getRenderPositionX(),
+                        actor.getRenderPositionY(), tileSize, tileSize, null);
+                } else {
+                    textureToPaint = Textures.getSprite("dead" + actor.getType());
+                    g.drawImage(textureToPaint, actor.getRenderPositionX(),
+                        actor.getRenderPositionY(), tileSize, tileSize, null);
                 }
             }
             case "door" -> {
-                if (actor.healthPoints >= 0) {
-                    g.setColor(Color.ORANGE);
-                    g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
-                            tileSize, tileSize);
-                }
+                textureToPaint = Textures.getSprite(actor.getType());
+                g.drawImage(textureToPaint, actor.getRenderPositionX(), actor.getRenderPositionY(),
+                    tileSize, tileSize, null);
             }
             case "obelisk" -> {
-                if (actor.healthPoints >= 0) {
-                    g.setColor(Color.BLUE);
-                    g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
-                            tileSize, tileSize);
-                }
+                textureToPaint = Textures.getSprite(actor.getType());
+                g.drawImage(textureToPaint, actor.getRenderPositionX(), actor.getRenderPositionY(),
+                    tileSize, tileSize, null);
             }
             case "treasure" -> {
-                if (actor.healthPoints >= 0) {
-                    g.setColor(Color.YELLOW);
-                    g.fillRect(actor.getRenderPositionX(), actor.getRenderPositionY(),
-                            tileSize, tileSize);
-                }
+                textureToPaint = Textures.getSprite(actor.getType());
+                g.drawImage(textureToPaint, actor.getRenderPositionX(), actor.getRenderPositionY(),
+                    tileSize, tileSize, null);
+                
             }
             default -> {
             }
-        }
-        
-
+        }      
     }
 
     /**
@@ -142,7 +147,7 @@ public class GamePainter {
     public void paintUI() {
 
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Dialog", Font.PLAIN, 25));
+        g.setFont(new Font("Courier", Font.BOLD, 30));
 
 
         // Draw Game Information
@@ -153,7 +158,19 @@ public class GamePainter {
 
         // Draw Player Stats
         g.drawString("HP: " + Integer.toString(player.healthPoints), tileSize * 2, tileSize * 16);
-        g.drawString("COINS: ", tileSize * 13, tileSize * 16);
+        g.drawString("COINS: " + Integer.toString(player.coins), tileSize * 13, tileSize * 16);
+    }
+
+    public void paintGameOver() {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, GamePanel.SCREEN_WIDTH, GamePanel.SCREEN_HEIGHT);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Courier", Font.BOLD, 20));
+        g.drawString("You perished in the dream...", (tileSize * 5), tileSize * 6);
+        g.setFont(new Font("Courier", Font.BOLD, 40));
+        g.drawString("Game Over Bruh..", (tileSize * 5), tileSize * 7);
+
     }
 
     /**
@@ -165,10 +182,11 @@ public class GamePainter {
     public static void paintMessage(String s) {
 
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Dialog", Font.PLAIN, 30));
+        g.setFont(new Font("Courier", Font.BOLD, 35));
         g.drawString(s, tileSize * 3, tileSize * 12);
         
     }
+
 
 
     // Utility Get and Set Methods :

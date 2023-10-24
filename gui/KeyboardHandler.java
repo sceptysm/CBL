@@ -20,14 +20,12 @@ public class KeyboardHandler implements KeyListener {
 
         int keyCode = e.getKeyCode();
         keyboardRecord[keyCode] = true;
-        System.out.println((char) keyCode);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
         keyboardRecord[keyCode] = false;
-        System.out.println((char) keyCode);
     }
 
 

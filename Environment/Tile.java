@@ -10,13 +10,14 @@ public class Tile {
     private int positionY;
     private int renderPositionX;
     private int renderPositionY;
-    public boolean walkable;
+    protected boolean walkable;
     public Actor occupant;  //Actor at tile.
 
     int tileSize = GamePanel.REAL_TILE_SIZE;
 
-    
-
+    /**
+     * 
+     */
     Tile() {
         occupant = null;
         walkable = true;
@@ -32,6 +33,9 @@ public class Tile {
         updateRenderPosition();
     }
 
+    /**
+     * 
+     */
     void updateRenderPosition() {
         renderPositionX = positionX * tileSize;
         renderPositionY = positionY * tileSize;
@@ -64,6 +68,14 @@ public class Tile {
 
     public void setActor(Actor a) {
         occupant = a;
+    }
+
+    public boolean isWalkable() {
+        return walkable;
+    }
+
+    public void setWalkable(boolean b) {
+        walkable = b;
     }
 
     public int getRenderPositionX() {

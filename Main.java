@@ -1,7 +1,5 @@
 import gui.GamePanel;
 import javax.swing.JFrame;
-import environment.Stage;
-import actors.Player;
 
 /**
  * Test method for draft classes and interactions.
@@ -23,6 +21,5 @@ public class Main {
  
         frame.setLocationRelativeTo(null); //Displayed at center of the screen
         frame.setVisible(true);
-
     }
 }

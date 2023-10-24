@@ -1,20 +1,29 @@
 package items;
 
-import actors.Actor;
+interface InventoryElement {
+    void updateStats(int stageNr);
+}
 
-public abstract class Item {
+/**
+ * Item class.
+ */
 
-    Actor owner;
-    int value;
+public abstract class Item implements InventoryElement {
 
-    //visual representation
+    protected int level;
+    protected int value;
 
+    public String displayName;
 
-    void sell() {
-        owner.coins += value;
-        owner.inventory.remove(this);
+    public Item(int stageNr) {
+        this.level = stageNr;
+    }
 
-    } 
+    public String getDisplayName() {
+        return this.displayName;
+    }
 
-    
+    public int getLevel() {
+        return this.level;
+    }
 }

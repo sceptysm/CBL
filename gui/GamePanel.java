@@ -16,8 +16,8 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements ActionListener {
 
     // Screen Configuration
-    static final int ORIGINAL_TILE_SIZE = 8;
-    static final int SIZE_SCALER = 6; // Scales pixelated graphics
+    static final int ORIGINAL_TILE_SIZE = 16;
+    static final int SIZE_SCALER = 3; // Scales pixelated graphics
     public static final int REAL_TILE_SIZE = ORIGINAL_TILE_SIZE * SIZE_SCALER;
 
     // 4 : 3 Ratio - Number of Tiles Rendered at a time
@@ -49,14 +49,11 @@ public class GamePanel extends JPanel implements ActionListener {
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
 
+        Textures.loadTextures();
         GameLoop.startGame();
 
         painter = new GamePainter(GameLoop.currentRoom);
         GameLoop.painter = painter;
-
-        System.out.println(REAL_TILE_SIZE);
-        System.out.println(SCREEN_HEIGHT);
-        System.out.println(SCREEN_WIDTH);
     }
 
     @Override
